@@ -1,0 +1,33 @@
+
+cd xunfei/bin
+
+LD_LIBRARY_PATH=LD_LIBRARY_PATH:./ ./iatdemo wav/iflytek03.wav > o.txt
+LD_LIBRARY_PATH=LD_LIBRARY_PATH:./ ./ttsdemo o.wav 我是大傻逼 你是小傻逼 > o.txt
+
+
+
+curl "https://api.att.com/oauth/v4/token" \
+    --insecure \
+    --header "Accept: application/json" \
+    --header "Content-Type: application/x-www-form-urlencoded" \
+    --data "client_id=2uuw59pwuxjppqw5mv0ges92zpi1kohc&client_secret=s3hvwggztqtod0f0ikk5ftqstlkiap8v&grant_type=client_credentials&scope=SPEECH"
+
+
+
+
+curl -X POST --header "Authorization: Bearer ItU3gSxbeKthTb1DQySlLYtveS4SXYwo" \
+--header "Accept: application/xml" \
+--header "Content-Type: audio/wav" \
+-d @o.wav \
+https://api.att.com/speech/v3/speechToText
+
+
+ "Authorization: Bearer 38C2399A23999
+Accept: application/xml
+Content-length: 5655
+Connection: keep-alive
+Content-Type: audio/amr
+X-SpeechContext: BusinessSearch
+X-Arg: ClientApp=NoteTaker,ClientVersion=1.0.1,DeviceType=Android
+
+{{...audio data...}}

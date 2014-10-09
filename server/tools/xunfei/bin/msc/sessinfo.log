@@ -1,0 +1,20 @@
+============================================================
+Time  2014/10/08 22:24:20 784 
+============================================================
+[2014/10/08 22:24:20 784] sessinfo   415  session info loaded!  
+[2014/10/08 22:24:20 784] sessinfo   424  SYS_MSG_SHUTDOWN  
+[2014/10/08 22:24:20 784] sessinfo   176  no receive upload success response  
+[2014/10/08 22:24:20 785] dkjson     781  dkjson:781: bad argument #2 to 'pegmatch' (string expected, got nil)  
+============================================================
+Time  2014/10/09 09:13:44 686 
+============================================================
+[2014/10/09 09:13:44 686] sessinfo   415  session info loaded!  
+[2014/10/09 09:13:44 703] sessinfo   434  SESSIONINFO_CMD  
+[2014/10/09 09:13:44 703] sessinfo   435  have_data_in_queue =   0  
+[2014/10/09 09:13:44 704] sessinfo   460  session info upload start  
+[2014/10/09 09:13:44 705] sessinfo   404  sessinfo new encoder success  
+[2014/10/09 09:13:44 705] sessinfo   424  SYS_MSG_SHUTDOWN  
+[2014/10/09 09:13:44 705] sessinfo   176  no receive upload success response  
+[2014/10/09 09:13:44 706] sessinfo   143  new session  
+[2014/10/09 09:13:44 706] sessinfo   144  csid =  cisr1P1HHBHruYY1wA4enHHlKYuYokLudcs  
+[2014/10/09 09:13:44 706] sessinfo   146  csid_t =  1412860421  

@@ -1,0 +1,23 @@
+
+cd xunfei/bin
+
+LD_LIBRARY_PATH=LD_LIBRARY_PATH:./ ./iatdemo wav/iflytek03.wav > o.txt
+LD_LIBRARY_PATH=LD_LIBRARY_PATH:./ ./ttsdemo o.wav 我是大傻逼 你是小傻逼 > o.txt
+
+
+
+curl "https://api.att.com/oauth/v4/token" \
+    --insecure \
+    --header "Accept: application/json" \
+    --header "Content-Type: application/x-www-form-urlencoded" \
+    --data "client_id=2uuw59pwuxjppqw5mv0ges92zpi1kohc&client_secret=s3hvwggztqtod0f0ikk5ftqstlkiap8v&grant_type=client_credentials&scope=SPEECH"
+
+{"access_token":"ItU3gSxbeKthTb1DQySlLYtveS4SXYwo","token_type":"bearer","expires_in":172799,"refresh_token":"nkP8UO2JywRCRvog7i0evzc8NwCethML"}
+
+
+curl "https://api.att.com/speech/v3/speechToText" \
+    --header "Authorization: Bearer ItU3gSxbeKthTb1DQySlLYtveS4SXYwo" \
+    --header "Accept: application/json" \
+    --header "Content-Type: audio/amr" \
+    --data-binary @o.wav \
+    --request POST
