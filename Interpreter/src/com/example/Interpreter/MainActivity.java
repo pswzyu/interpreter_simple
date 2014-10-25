@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
 		//ask for voiceFile from server
 		//store in recieveFile
 		//play(String recieveFileUrl);
-    	//new receiveService().execute();  
+    	new receiveService().execute();  
 	}
     
     private class SendService extends AsyncTask<Void, Void, Void>  
@@ -204,8 +204,8 @@ public class MainActivity extends Activity {
     {  
     	protected Void doInBackground(Void... params)  
         {  
+    		ReceiveUtility re = new ReceiveUtility();
     		while(true){
-    			ReceiveUtility re = new ReceiveUtility();
     			if(re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName())==1){    //for test only!!
     			//if(re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName())==1){
         			System.out.println("Received Success!");
