@@ -7,4 +7,5 @@
     <string name="button_back_to_record">Back to Record</string>
     <string name="hint_self_id">Self ID</string>
     <string name="hint_target_id">Target ID</string>
+    <string name="button_play">Click to Play</string>
 </resources>

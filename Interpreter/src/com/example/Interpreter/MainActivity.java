@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
         if (firstStart) {
             config = Config.getConfig();
             writeConfig(config);
+            receiveopen();
         } else {
             config = readConfig();
         }
@@ -41,6 +42,9 @@ public class MainActivity extends Activity {
         final Button btnRecord = (Button) findViewById(R.id.button_record);
         final Button btnSend = (Button) findViewById(R.id.button_send);
         final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
+        //final Button btnPlay = (Button) findViewById(R.id.button_play);
+      
+        
         btnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -60,7 +64,7 @@ public class MainActivity extends Activity {
                         audio.stopRecording();
                         btnRecord.setText(R.string.button_waiting);
                         btnRecord.setBackgroundColor(getResources().getColor(R.color.button_waiting));
-                        audio.startPlaying(config.getSendFileName());
+                        //audio.startPlaying(config.getSendFileName());
 
                         btnRecord.setVisibility(View.INVISIBLE);
                         btnBack.setVisibility(View.VISIBLE);
@@ -100,6 +104,13 @@ public class MainActivity extends Activity {
                 btnRecord.setVisibility(View.VISIBLE);
             }
         });
+        /*
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	audio.startPlaying(config.getReceiveFileName());
+            }
+        });*/
     }
 
     // Write the configuration to file.
@@ -146,19 +157,12 @@ public class MainActivity extends Activity {
     	new SendService().execute();  
     }
     
-    private void receive(){
+    private void receiveopen(){
 		//always run
 		//ask for voiceFile from server
 		//store in recieveFile
 		//play(String recieveFileUrl);
-    	
-		ReceiveUtility re = new ReceiveUtility();
-		if(re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName())==1){
-			System.out.println("Received Success!");
-		}
-		else{
-			System.out.println("No voice message found!");
-		}
+    	new receiveService().execute();  
 	}
     
     private class SendService extends AsyncTask<Void, Void, Void>  
@@ -190,10 +194,37 @@ public class MainActivity extends Activity {
             }
             return null;  
         }  
-  
-        protected void onPostExecute(Void result)  
+    	protected void onPostExecute(Void result)  
         {  
-        	
+     
+        } 
+    }
+    
+    private class receiveService extends AsyncTask<Void, Void, Void>  
+    {  
+    	protected Void doInBackground(Void... params)  
+        {  
+    		ReceiveUtility re = new ReceiveUtility();
+    		while(true){
+    			if(re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName())==1){    //for test only!!
+    			//if(re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName())==1){
+        			System.out.println("Received Success!");
+        		}
+        		else{
+        			//System.out.println("No voice message found!");
+        		}
+        		try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}  
         }  
+    	protected void onPostExecute(Void result)  
+        {  
+     
+        } 
+
     }
 }

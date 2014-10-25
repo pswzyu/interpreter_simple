@@ -1,7 +1,7 @@
 package com.example.Interpreter;
 
 public class Config implements java.io.Serializable{
-    private final String filePath = "/storage/sdcard0/interpreter/";
+    private final String filePath = "/sdcard/interpreter/";
     private final String sendFileName = filePath + "send";
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
