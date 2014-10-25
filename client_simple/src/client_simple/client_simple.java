@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
 
+
 class client_simple{
 	static String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 	static String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
