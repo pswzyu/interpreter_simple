@@ -5,9 +5,11 @@ public class Config implements java.io.Serializable{
     private final String sendFileName = filePath + "send";
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
-    private String selfId = "0";
-    private String fromId = "1";
-
+    private String selfId = "1";
+    private String fromId = "2";
+	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
+	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
+	
     public String getFilePath() {
         return filePath;
     }
@@ -47,4 +49,12 @@ public class Config implements java.io.Serializable{
     public static Config getConfig() {
         return ConfigLoader.config;
     }
+    
+    public String getSendUrl(){
+    	return sendUrl;
+    }
+    public String getReceiveUrl(){
+    	return receiveUrl;
+    }
+    
 }

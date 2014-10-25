@@ -3,12 +3,15 @@ package com.example.Interpreter;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import java.io.*;
+import java.util.List;
+
 
 public class MainActivity extends Activity {
     private final String SHAREDPREFERENCES_NAME = "Interpreter";
@@ -53,7 +56,10 @@ public class MainActivity extends Activity {
                         audio.stopRecording();
                         button.setText(R.string.button_waiting);
                         button.setBackgroundColor(getResources().getColor(R.color.button_waiting));
-                        audio.startPlaying();
+                        //audio.startPlaying();
+                        
+                        //send record to server
+                        send();
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
                         break;
@@ -103,4 +109,59 @@ public class MainActivity extends Activity {
 
         return config;
     }
+    
+    private void send(){	
+    	new SendService().execute();  
+    }
+    
+    private void receive(){
+		//always run
+		//ask for voiceFile from server
+		//store in recieveFile
+		//play(String recieveFileUrl);
+    	
+		ReceiveUtility re = new ReceiveUtility();
+		if(re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getFromId(),config.getReceiveFileName())==1){
+			System.out.println("Received Success!");
+		}
+		else{
+			System.out.println("No voice message found!");
+		}
+	}
+    
+    private class SendService extends AsyncTask<Void, Void, Void>  
+    {  
+    	protected Void doInBackground(Void... params)  
+        {  
+    		try {
+    			String charset = "UTF-8";
+    			//config = Config.getConfig();
+    	        File uploadFile = new File(config.getSendFileName());
+    	       
+                SendUtility multipart = new SendUtility(config.getSendUrl(), charset);
+          
+                //multipart.addHeaderField("User-Agent", "CodeJava");
+                //multipart.addHeaderField("Test-Header", "Header-Value");
+                multipart.addFormField("target_id", config.getFromId());
+                multipart.addFormField("self_id", config.getSelfId());
+                multipart.addFilePart("sound_file", uploadFile);
+     
+                List<String> response = multipart.finish();
+                 
+                System.out.println("SERVER REPLIED:");
+        
+                for (String line : response) {
+                    System.out.println(line);
+                }
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+            return null;  
+        }  
+  
+        protected void onPostExecute(Void result)  
+        {  
+        	
+        }  
+    }  
 }
