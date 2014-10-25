@@ -57,7 +57,7 @@ if (empty($_GET["self_id"]))
                 $file_info['filename']."_done.wav";
 //        $fn_after_conv = $file_info['dirname'].DIRECTORY_SEPARATOR .
 //                $file_info['filename']."_done.acc";
-        $fn_after_conv = $n_before_conv;
+        $fn_after_conv = $fn_before_conv;
         
         if ($self_userinfo["language"] == "zh_CN")
         {
