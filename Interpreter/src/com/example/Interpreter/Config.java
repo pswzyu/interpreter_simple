@@ -1,24 +1,50 @@
 package com.example.Interpreter;
 
 public class Config implements java.io.Serializable{
-    private static String sendFileName = "a";
-    private static String receiveFileName = "a";
-    private static String selfId = "a";
-    private static String fromId = "a";
+    private final String filePath = "/storage/sdcard0/interpreter/";
+    private final String sendFileName = filePath + "send";
+    private final String receiveFileName = filePath + "receive";
+    private final String configFileName = filePath + "config.cfg";
+    private String selfId = "0";
+    private String fromId = "1";
 
-    public static String getSendFileName() {
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public String getSendFileName() {
         return sendFileName;
     }
 
-    public static String getReceiveFileName() {
+    public String getReceiveFileName() {
         return receiveFileName;
     }
 
-    public static String getSelfId() {
+    public String getConfigFileName() {
+        return configFileName;
+    }
+
+    public String getSelfId() {
         return selfId;
     }
 
-    public static String getFromId() {
+    public String getFromId() {
         return fromId;
+    }
+
+    public void setSelfId(String selfId) {
+        selfId = selfId;
+    }
+
+    public void setFromId(String fromId) {
+        fromId = fromId;
+    }
+
+    private static final class ConfigLoader {
+        private static final Config config = new Config();
+    }
+
+    public static Config getConfig() {
+        return ConfigLoader.config;
     }
 }

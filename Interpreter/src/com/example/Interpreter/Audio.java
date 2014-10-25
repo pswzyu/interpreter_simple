@@ -1,4 +1,4 @@
-package com.example.interpreter;
+package com.example.Interpreter;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -10,19 +10,19 @@ public class Audio {
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
     private String mFileName;
-    private String LOG_TAG;
+    private final String LOG_TAG = Audio.class.getName();
+    private Config config = Config.getConfig();
     public Audio() {
-        mFileName = Config.getSendFileName();
-        LOG_TAG = Audio.class.getName();
+        mFileName = config.getSendFileName();
     }
 
     // Record the audio through the MIC.
-    public void startRecord() {
+    public void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
         try {
             mRecorder.prepare();
@@ -35,8 +35,15 @@ public class Audio {
 
 
     // Stop recording.
-    public void stopRecord() {
-        mRecorder.stop();
+    public void stopRecording() {
+        try {
+            mRecorder.stop();
+        } catch (Exception e) {
+            Log.v(LOG_TAG, "Nothing is recorded");
+            mRecorder = null;
+            return;
+        }
+
         mRecorder.release();
         mRecorder = null;
     }
