@@ -2,11 +2,11 @@ package com.example.Interpreter;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.io.*;
 
@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // Estimate if it's the first time start this activity.
+        // Estimate if it's the first time start this application.
         SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
         if (firstStart) {
@@ -33,8 +33,12 @@ public class MainActivity extends Activity {
         }
 
         // Initialize UI.
-        final Button button = (Button) findViewById(R.id.button);
-        button.setOnTouchListener(new View.OnTouchListener() {
+        final EditText targetEdit = (EditText) findViewById(R.id.targetEdit);
+        final EditText selfEdit = (EditText) findViewById(R.id.selfEdit);
+        final Button btnRecord = (Button) findViewById(R.id.button_record);
+        final Button btnSend = (Button) findViewById(R.id.button_send);
+        final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
+        btnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -43,17 +47,21 @@ public class MainActivity extends Activity {
                         // Start recording.
                         audio = new Audio();
                         audio.startRecording();
-                        button.setText(R.string.button_recording);
-                        button.setBackgroundColor(getResources().getColor(R.color.button_recording));
+                        btnRecord.setText(R.string.button_recording);
+                        btnRecord.setBackgroundColor(getResources().getColor(R.color.button_recording));
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_OUTSIDE:
                         v.setPressed(false);
                         // Stop recording.
                         audio.stopRecording();
-                        button.setText(R.string.button_waiting);
-                        button.setBackgroundColor(getResources().getColor(R.color.button_waiting));
-                        audio.startPlaying();
+                        btnRecord.setText(R.string.button_waiting);
+                        btnRecord.setBackgroundColor(getResources().getColor(R.color.button_waiting));
+                        audio.startPlaying(config.getSendFileName());
+
+                        btnRecord.setVisibility(View.INVISIBLE);
+                        btnBack.setVisibility(View.VISIBLE);
+                        btnSend.setVisibility(View.VISIBLE);
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
                         break;
@@ -67,7 +75,26 @@ public class MainActivity extends Activity {
             }
         });
 
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                config.setTargetId(targetEdit.getText().toString());
+                config.setSelfId(selfEdit.getText().toString());
+                // send();
+                btnSend.setVisibility(View.INVISIBLE);
+                btnBack.setVisibility(View.INVISIBLE);
+                btnRecord.setVisibility(View.VISIBLE);
+            }
+        });
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnSend.setVisibility(View.INVISIBLE);
+                btnBack.setVisibility(View.INVISIBLE);
+                btnRecord.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     // Write the configuration to file.
@@ -102,5 +129,11 @@ public class MainActivity extends Activity {
         }
 
         return config;
+    }
+
+    @Override
+    protected void onDestroy() {
+        writeConfig(config);
+        super.onDestroy();
     }
 }

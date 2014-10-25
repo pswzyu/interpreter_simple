@@ -3,4 +3,8 @@
     <string name="app_name">Interpreter</string>
     <string name="button_waiting">Hold to Record</string>
     <string name="button_recording">Recording...</string>
+    <string name="button_send">Send</string>
+    <string name="button_back_to_record">Back to Record</string>
+    <string name="hint_self_id">Self ID</string>
+    <string name="hint_target_id">Target ID</string>
 </resources>

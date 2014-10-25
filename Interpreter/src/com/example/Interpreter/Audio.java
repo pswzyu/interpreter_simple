@@ -9,19 +9,15 @@ import java.io.IOException;
 public class Audio {
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
-    private String mFileName;
     private final String LOG_TAG = Audio.class.getName();
     private Config config = Config.getConfig();
-    public Audio() {
-        mFileName = config.getSendFileName();
-    }
 
     // Record the audio through the MIC.
     public void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mRecorder.setOutputFile(mFileName);
+        mRecorder.setOutputFile(config.getSendFileName());
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
         try {
@@ -49,10 +45,10 @@ public class Audio {
     }
 
     // Play the audio.
-    public void startPlaying() {
+    public void startPlaying(String fileName) {
         mPlayer = new MediaPlayer();
         try {
-            mPlayer.setDataSource(mFileName);
+            mPlayer.setDataSource(fileName);
             mPlayer.prepare();
             mPlayer.start();
         } catch (IOException e) {

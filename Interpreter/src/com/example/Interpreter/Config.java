@@ -6,7 +6,7 @@ public class Config implements java.io.Serializable{
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
     private String selfId = "0";
-    private String fromId = "1";
+    private String targetId = "1";
 
     public String getFilePath() {
         return filePath;
@@ -28,16 +28,16 @@ public class Config implements java.io.Serializable{
         return selfId;
     }
 
-    public String getFromId() {
-        return fromId;
+    public String getTargetId() {
+        return  targetId;
     }
 
     public void setSelfId(String selfId) {
-        selfId = selfId;
+        this.selfId = selfId;
     }
 
-    public void setFromId(String fromId) {
-        fromId = fromId;
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
     }
 
     private static final class ConfigLoader {
