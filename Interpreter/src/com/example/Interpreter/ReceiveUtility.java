@@ -10,6 +10,8 @@ import java.net.URL;
 
 public class ReceiveUtility {
 
+	private FileOutputStream fs;
+
 	public int revieve(String url,String selfId,String targetId,String fileName){
 		try {
 			String path = url+"?self_id="+selfId+"&from_id="+targetId;
@@ -20,12 +22,13 @@ public class ReceiveUtility {
 			conn.setRequestMethod("GET");
 			if(conn.getResponseCode()==200){
 				InputStream inStream = (InputStream) conn.getInputStream();  
-		        FileOutputStream fs = new FileOutputStream(new File(fileName));  
+		        fs = new FileOutputStream(new File(fileName));  
 		        byte[] buffer = new byte[1204];  
 		        int byteread = 0;
 		        int bytesum = 0;
 		        while ((byteread = inStream.read(buffer)) != -1) {  
 		            bytesum += byteread;  
+		            System.out.println(buffer);
 		            fs.write(buffer, 0, byteread);  
 		        } 
 		        if(bytesum == 0){
