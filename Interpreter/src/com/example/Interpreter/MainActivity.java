@@ -3,6 +3,7 @@ package com.example.Interpreter;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -153,8 +154,13 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
     
-    private void send(){	
-    	new SendService().execute();  
+    private void send(){
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+            new SendService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            new SendService().execute();
+        }
+    	//new SendService().execute();
     }
     
     private void receiveopen(){
@@ -162,7 +168,12 @@ public class MainActivity extends Activity {
 		//ask for voiceFile from server
 		//store in recieveFile
 		//play(String recieveFileUrl);
-    	new receiveService().execute();  
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+            new receiveService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            new receiveService().execute();
+        }
+    	//new receiveService().execute();
 	}
     
     private class SendService extends AsyncTask<Void, Void, Void>  
