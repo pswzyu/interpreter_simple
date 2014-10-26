@@ -1,3 +1,6 @@
 .metadata
 server/nbproject/private
 server/uploads
+Interpreter/.idea
+Interpreter/out
+Interpreter/gen

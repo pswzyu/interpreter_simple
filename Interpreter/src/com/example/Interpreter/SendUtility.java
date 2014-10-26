@@ -56,7 +56,7 @@ public class SendUtility {
         outputStream = httpConn.getOutputStream();
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset),
                 true);
-        httpConn.setConnectTimeout(5000);
+        httpConn.setConnectTimeout(20000);
     }
  
     /**

@@ -45,44 +45,54 @@ if (empty($_GET["self_id"]))
             
         }
         //$from_userinfo
-        echo $from_text;
-        
+        //echo "from_test:".$from_text;
         // translate
         $to_text = $google_services->translate($from_text, $from_userinfo["language"],
                 $self_userinfo["language"]);
         
+        //echo $to_text;
         // text to speech
-        $result_fname = $result["sound_filename"]."_done";
+        $file_info = pathinfo($result["sound_filename"]);
+        $fn_before_conv = $file_info['dirname'].DIRECTORY_SEPARATOR .
+                $file_info['filename']."_done.wav";
+//        $fn_after_conv = $file_info['dirname'].DIRECTORY_SEPARATOR .
+//                $file_info['filename']."_done.acc";
+        $fn_after_conv = $fn_before_conv;
         
         if ($self_userinfo["language"] == "zh_CN")
         {
-            $xunfei_services->textToSpeech($to_text, $result_fname);
+            $xunfei_services->textToSpeech($to_text, $fn_before_conv);
         }elseif($self_userinfo["language"] == "en")
         {
-            $att_services->textToSpeech($to_text, $result_fname);
+            $att_services->textToSpeech($to_text, $fn_before_conv);
         }else
         {
             
         }
         
-        if (file_exists($result_fname))  
+        // convert to acc
+        //shell_exec("ffmpeg -i {$fn_before_conv}  -acodec libfaac {$fn_after_conv}");
+        
+        
+        if (file_exists($fn_after_conv))  
         {   
             
             header('Content-Description: File Transfer');     
             header('Content-Type: application/octet-stream');     
-            header('Content-Disposition: attachment; filename='.basename($result_fname));     
+            header('Content-Disposition: attachment; filename='.basename($fn_after_conv));     
             header('Content-Transfer-Encoding: binary');     
             header('Expires: 0');     
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');     
             header('Pragma: public');     
-            header('Content-Length: ' . filesize($result_fname));     
+            header('Content-Length: ' . filesize($fn_after_conv));     
             ob_clean();   //重要的就是这个函数的调用， 清空但不关闭输出缓存， 否则下载的文件头两个字符会是0a  
             flush();     
-            readfile($result_fname);   // 输出文件内容
+            readfile($fn_after_conv);   // 输出文件内容
             
             $udb->query("DELETE FROM `chat_message` WHERE id='{$result["id"]}';");
             unlink($result["sound_filename"]);
-            unlink($result_fname);
+            unlink($fn_before_conv);
+            //unlink($fn_after_conv);
             
         }
     }

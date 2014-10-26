@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,9 +15,11 @@ import android.widget.EditText;
 
 import java.io.*;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 
 public class MainActivity extends Activity {
+	
     private final String SHAREDPREFERENCES_NAME = "Interpreter";
     private final int CAMERA_REQUEST = 1;
     private final String LOG_TAG = Audio.class.getName();
@@ -29,6 +32,7 @@ public class MainActivity extends Activity {
     final Button btnSend = (Button) findViewById(R.id.button_send);
     final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
     final Button btnAddTarget = (Button) findViewById(R.id.button_add_target);
+
     /**
      * Called when the activity is first created.
      */
@@ -43,6 +47,7 @@ public class MainActivity extends Activity {
         if (firstStart) {
             config = Config.getConfig();
             writeConfig(config);
+            receiveopen();
         } else {
             config = readConfig();
         }
@@ -67,7 +72,7 @@ public class MainActivity extends Activity {
                         audio.stopRecording();
                         btnRecord.setText(R.string.button_waiting);
                         btnRecord.setBackgroundColor(getResources().getColor(R.color.button_waiting));
-                        audio.startPlaying(config.getSendFileName());
+                        //audio.startPlaying(config.getSendFileName());
 
                         btnRecord.setVisibility(View.INVISIBLE);
                         btnBack.setVisibility(View.VISIBLE);
@@ -170,23 +175,25 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
     
-    private void send(){	
-    	new SendService().execute();  
+    private void send(){
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+            new SendService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            new SendService().execute();
+        }
+    	//new SendService().execute();
     }
     
-    private void receive(){
+    private void receiveopen(){
 		//always run
 		//ask for voiceFile from server
 		//store in recieveFile
-		//play(String recieveFileUrl);
-    	
-		ReceiveUtility re = new ReceiveUtility();
-		if(re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName())==1){
-			System.out.println("Received Success!");
-		}
-		else{
-			System.out.println("No voice message found!");
-		}
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+            new receiveService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            new receiveService().execute();
+        }
+    	//new receiveService().execute();
 	}
     
     private class SendService extends AsyncTask<Void, Void, Void>  
@@ -194,6 +201,7 @@ public class MainActivity extends Activity {
     	protected Void doInBackground(Void... params)  
         {  
     		try {
+    			//lock.lock();
     			String charset = "UTF-8";
     			//config = Config.getConfig();
     	        File uploadFile = new File(config.getSendFileName());
@@ -213,15 +221,47 @@ public class MainActivity extends Activity {
                 for (String line : response) {
                     System.out.println(line);
                 }
+                //lock.unlock();
             } catch (IOException ex) {
                 System.err.println(ex);
             }
             return null;  
         }  
-  
-        protected void onPostExecute(Void result)  
+    	protected void onPostExecute(Void result)  
         {  
-        	
+     
+        } 
+    }
+    
+    private class receiveService extends AsyncTask<Void, Void, Void>  
+    {  
+    	protected Void doInBackground(Void... params)  
+        {  
+    		ReceiveUtility re = new ReceiveUtility();
+    		while(true){
+    			//lock.lock();
+    			int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
+    			//int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
+    			if(count!=-1){    
+        			System.out.println("Received Success!");
+        			audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
+        		}
+        		else{
+        			//System.out.println("No voice message found!");
+        		}
+        		try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		//lock.unlock();
+    		}  
         }  
+    	protected void onPostExecute(Void result)  
+        {  
+     
+        } 
+
     }
 }

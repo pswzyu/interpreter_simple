@@ -1,0 +1,3 @@
+[submodule "server/lib/php/facepp-php-sdk"]
+	path = server/lib/php/facepp-php-sdk
+	url = https://github.com/FacePlusPlus/facepp-php-sdk.git
