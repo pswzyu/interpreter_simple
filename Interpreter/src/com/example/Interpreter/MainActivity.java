@@ -130,6 +130,20 @@ public class MainActivity extends Activity {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
+
+        targetEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                config.setTargetId(targetEdit.getText().toString());
+            }
+        });
+
+        selfEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                config.setSelfId(selfEdit.getText().toString());
+            }
+        });
     }
 
     // Write the configuration to file.
