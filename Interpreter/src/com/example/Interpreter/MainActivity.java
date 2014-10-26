@@ -179,7 +179,33 @@ public class MainActivity extends Activity {
         }
     	//new SendService().execute();
     }
-    
+
+    private void sendPic(){
+        try {
+            String charset = "UTF-8";
+            File uploadFile = new File(config.getTargetPhotoFileName());
+
+            SendUtility multipart = new SendUtility(config.getSendPicUrl(), charset);
+
+            //multipart.addHeaderField("User-Agent", "CodeJava");
+            //multipart.addHeaderField("Test-Header", "Header-Value");
+            multipart.addFormField("action", "recognition");
+            multipart.addFormField("self_id", config.getSelfId());
+            multipart.addFilePart("pic_file", uploadFile);
+
+            List<String> response = multipart.finish();
+
+            System.out.println("SERVER REPLIED:");
+
+            for (String line : response) {
+                System.out.println(line);
+            }
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+
+    }
+
     private void receiveopen(){
 		//always run
 		//ask for voiceFile from server

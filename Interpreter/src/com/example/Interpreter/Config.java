@@ -11,6 +11,7 @@ public class Config implements java.io.Serializable{
     private String targetId = "2";
 	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
+    private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
 
     public String getFilePath() {
         return filePath;
@@ -38,6 +39,10 @@ public class Config implements java.io.Serializable{
 
     public String getTargetPhotoFileName() {
         return targetPhotoFileName;
+    }
+
+    public String getSendPicUrl() {
+        return sendPicUrl;
     }
 
     public void setSelfId(String selfId) {
