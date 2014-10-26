@@ -20,6 +20,7 @@ import java.util.concurrent.locks.Lock;
 
 class client_simple{
 	static String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
+	static String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
 	static String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
 	static String  selfId;
 	static String  targetId;
@@ -29,6 +30,8 @@ class client_simple{
 	static String sendFileName = "record.wav";
 	static String receiveFilePath = "voice/";
 	static String receiveFileName = "receive.wav";
+	static String sendPicPath = "Pic/";
+	static String sendPicName = "Pic";
 	String recieveFileUrl;
 
 	public static void main(String[] str){
@@ -41,6 +44,8 @@ class client_simple{
         	while(true){
 	        	System.out.println("input 1 for send a file");
 	    		System.out.println("input 2 for recieve a file");
+	    		System.out.println("input 3 for send  Pic1");
+	    		System.out.println("input 4 for send  Pic2");
 	    		System.out.println("input 0 for exit");
 	            while ((c = (char) in.read()) > 0) {
 	            	if(c == '1'){
@@ -50,6 +55,14 @@ class client_simple{
 	            	else if(c == '2'){
 	            		System.out.println("received");
 	            		receive();
+	            	}
+	            	else if(c == '3'){
+	            		System.out.println("send Pic1");
+	            		sendPic(1);
+	            	}
+	            	else if(c == '4'){
+	            		System.out.println("send Pic2");
+	            		sendPic(2);
 	            	}
 	            	else if(c == '0'){
 	            		return;
@@ -87,6 +100,32 @@ class client_simple{
 		
 	}
 
+	private static void sendPic(int id){	 
+        try {
+			String charset = "UTF-8";
+	        File uploadFile = new File(sendPicPath+sendPicName+String.valueOf(id)+".jpg");
+	        
+            SendUtility multipart = new SendUtility(sendPicUrl, charset);
+             
+            //multipart.addHeaderField("User-Agent", "CodeJava");
+            //multipart.addHeaderField("Test-Header", "Header-Value");
+            multipart.addFormField("action", "recognition");
+            multipart.addFormField("self_id", selfId);
+            multipart.addFilePart("pic_file", uploadFile);
+ 
+            List<String> response = multipart.finish();
+             
+            System.out.println("SERVER REPLIED:");
+    
+            for (String line : response) {
+                System.out.println(line);
+            }
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+	
+	}
+	
 	private static void receive(){
 		//always run
 		//ask for voiceFile from server
