@@ -29,6 +29,13 @@ public class MainActivity extends Activity {
     private Config config;
     private Audio audio;
 
+    private  EditText targetEdit ;
+    private  EditText selfEdit ;
+    private  Button btnRecord ;
+    private  Button btnSend ;
+    private  Button btnBack ;
+    private  Button btnAddTarget ;
+
     /**
      * Called when the activity is first created.
      */
@@ -49,13 +56,12 @@ public class MainActivity extends Activity {
         }
 
         // Initialize UI.
-        final EditText targetEdit = (EditText) findViewById(R.id.targetEdit);
-        final EditText selfEdit = (EditText) findViewById(R.id.selfEdit);
-        final Button btnRecord = (Button) findViewById(R.id.button_record);
-        final Button btnSend = (Button) findViewById(R.id.button_send);
-        final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
-        final Button btnAddTarget = (Button) findViewById(R.id.button_add_target);
-
+          targetEdit = (EditText) findViewById(R.id.targetEdit);
+          selfEdit = (EditText) findViewById(R.id.selfEdit);
+          btnRecord = (Button) findViewById(R.id.button_record);
+          btnSend = (Button) findViewById(R.id.button_send);
+          btnBack = (Button) findViewById(R.id.button_back_to_record);
+          btnAddTarget = (Button) findViewById(R.id.button_add_target);
         btnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -162,7 +168,8 @@ public class MainActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            // Send the target photo.
+            // Send the target photo and get the target ID.
+            sendPic();
         }
     }
     @Override
@@ -181,27 +188,10 @@ public class MainActivity extends Activity {
     }
 
     private void sendPic(){
-        try {
-            String charset = "UTF-8";
-            File uploadFile = new File(config.getTargetPhotoFileName());
-
-            SendUtility multipart = new SendUtility(config.getSendPicUrl(), charset);
-
-            //multipart.addHeaderField("User-Agent", "CodeJava");
-            //multipart.addHeaderField("Test-Header", "Header-Value");
-            multipart.addFormField("action", "recognition");
-            multipart.addFormField("self_id", config.getSelfId());
-            multipart.addFilePart("pic_file", uploadFile);
-
-            List<String> response = multipart.finish();
-
-            System.out.println("SERVER REPLIED:");
-
-            for (String line : response) {
-                System.out.println(line);
-            }
-        } catch (IOException ex) {
-            System.err.println(ex);
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+            new sendPicService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            new sendPicService().execute();
         }
 
     }
@@ -284,6 +274,51 @@ public class MainActivity extends Activity {
         {  
      
         } 
+
+    }
+
+    private class sendPicService extends AsyncTask<Void, Void, String>
+    {
+
+        protected String doInBackground(Void... params)
+        {
+            try {
+                String charset = "UTF-8";
+                File uploadFile = new File(config.getTargetPhotoFileName());
+
+                SendUtility multipart = new SendUtility(config.getSendPicUrl(), charset);
+
+                //multipart.addHeaderField("User-Agent", "CodeJava");
+                //multipart.addHeaderField("Test-Header", "Header-Value");
+                multipart.addFormField("action", "recognition");
+                multipart.addFormField("self_id", config.getSelfId());
+                multipart.addFilePart("pic_file", uploadFile);
+
+                List<String> response = multipart.finish();
+
+                System.out.println("SERVER REPLIED:");
+
+
+                for (String line : response) {
+                    System.out.println(line);
+                }
+                return response.get(0);
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+            return null;
+        }
+        protected void onPostExecute(String result)
+        {
+            if (result == null || result.equals("NULL"))
+            {
+                // alert the user that the pic is not valid
+            }else{
+                // set the targetid
+                targetEdit.setText(result);
+
+            }
+        }
 
     }
 }
