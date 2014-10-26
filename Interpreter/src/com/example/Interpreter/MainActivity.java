@@ -1,6 +1,7 @@
 package com.example.Interpreter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -26,13 +27,6 @@ public class MainActivity extends Activity {
     private Config config;
     private Audio audio;
 
-    final EditText targetEdit = (EditText) findViewById(R.id.targetEdit);
-    final EditText selfEdit = (EditText) findViewById(R.id.selfEdit);
-    final Button btnRecord = (Button) findViewById(R.id.button_record);
-    final Button btnSend = (Button) findViewById(R.id.button_send);
-    final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
-    final Button btnAddTarget = (Button) findViewById(R.id.button_add_target);
-
     /**
      * Called when the activity is first created.
      */
@@ -53,6 +47,13 @@ public class MainActivity extends Activity {
         }
 
         // Initialize UI.
+        final EditText targetEdit = (EditText) findViewById(R.id.targetEdit);
+        final EditText selfEdit = (EditText) findViewById(R.id.selfEdit);
+        final Button btnRecord = (Button) findViewById(R.id.button_record);
+        final Button btnSend = (Button) findViewById(R.id.button_send);
+        final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
+        final Button btnAddTarget = (Button) findViewById(R.id.button_add_target);
+
         btnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -162,11 +163,19 @@ public class MainActivity extends Activity {
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(config.getConfigFileName());
+                targetPhoto.compress(Bitmap.CompressFormat.JPEG, 100, out);
             } catch (FileNotFoundException e) {
-                Log.e(LOG_TAG, "File is not ");
+                Log.e(LOG_TAG, "File is not found.");
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            targetPhoto.compress(Bitmap.CompressFormat.JPEG, 100, out);
         }
     }
     @Override

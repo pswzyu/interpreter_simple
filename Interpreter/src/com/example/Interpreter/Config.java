@@ -5,7 +5,7 @@ public class Config implements java.io.Serializable{
     private final String sendFileName = filePath + "send";
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
-    private final String targetPhotoFileName = filePath + "targetPhoto";
+    private final String targetPhotoFileName = filePath + "targetPhoto.jpg";
 
     private String selfId = "1";
     private String targetId = "2";
