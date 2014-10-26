@@ -1,10 +1,11 @@
 package com.example.Interpreter;
 
 public class Config implements java.io.Serializable{
-    private final String filePath = "/storage/sdcard0/interpreter/";
+    private final String filePath = "/sdcard/interpreter/";
     private final String sendFileName = filePath + "send";
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
+    private final String targetPhotoFileName = filePath + "targetPhoto";
 
     private String selfId = "1";
     private String targetId = "2";
@@ -35,6 +36,10 @@ public class Config implements java.io.Serializable{
         return  targetId;
     }
 
+    public String getTargetPhotoFileName() {
+        return targetPhotoFileName;
+    }
+
     public void setSelfId(String selfId) {
         this.selfId = selfId;
     }
@@ -57,5 +62,4 @@ public class Config implements java.io.Serializable{
     public String getReceiveUrl(){
     	return receiveUrl;
     }
-    
 }

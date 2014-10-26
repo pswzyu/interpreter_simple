@@ -6,7 +6,8 @@
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_above="@+id/targetEdit"
+            android:layout_above="@id/targetEdit"
+            android:id="@+id/text_view"
             android:background="@color/text_background"/>
 
     <EditText
@@ -29,6 +30,12 @@
             android:text="@string/button_waiting"
             android:textColor="@color/text"
             android:background="@color/button_waiting"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/button_add_target"
+            android:text="@string/button_add_target"/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -1,9 +1,12 @@
 package com.example.Interpreter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +18,17 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private final String SHAREDPREFERENCES_NAME = "Interpreter";
+    private final int CAMERA_REQUEST = 1;
+    private final String LOG_TAG = Audio.class.getName();
     private Config config;
     private Audio audio;
+
+    final EditText targetEdit = (EditText) findViewById(R.id.targetEdit);
+    final EditText selfEdit = (EditText) findViewById(R.id.selfEdit);
+    final Button btnRecord = (Button) findViewById(R.id.button_record);
+    final Button btnSend = (Button) findViewById(R.id.button_send);
+    final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
+    final Button btnAddTarget = (Button) findViewById(R.id.button_add_target);
     /**
      * Called when the activity is first created.
      */
@@ -25,7 +37,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // Estimate if it's the first time start this application.
+        // Estimate if it's the first time to start this application.
         SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
         if (firstStart) {
@@ -36,11 +48,6 @@ public class MainActivity extends Activity {
         }
 
         // Initialize UI.
-        final EditText targetEdit = (EditText) findViewById(R.id.targetEdit);
-        final EditText selfEdit = (EditText) findViewById(R.id.selfEdit);
-        final Button btnRecord = (Button) findViewById(R.id.button_record);
-        final Button btnSend = (Button) findViewById(R.id.button_send);
-        final Button btnBack = (Button) findViewById(R.id.button_back_to_record);
         btnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -100,6 +107,14 @@ public class MainActivity extends Activity {
                 btnRecord.setVisibility(View.VISIBLE);
             }
         });
+
+        btnAddTarget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        });
     }
 
     // Write the configuration to file.
@@ -136,6 +151,19 @@ public class MainActivity extends Activity {
         return config;
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bitmap targetPhoto = (Bitmap) data.getExtras().get("data");
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(config.getConfigFileName());
+            } catch (FileNotFoundException e) {
+                Log.e(LOG_TAG, "File is not ");
+                e.printStackTrace();
+            }
+            targetPhoto.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        }
+    }
     @Override
     protected void onDestroy() {
         writeConfig(config);
