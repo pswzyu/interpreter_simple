@@ -255,7 +255,7 @@ public class MainActivity extends Activity {
     			int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
     			//int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
     			if(count!=-1){    
-        			System.out.println("Received Success!");
+        			System.out.println("Received Success!"+String.valueOf(count));
         			audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
         		}
         		else{
