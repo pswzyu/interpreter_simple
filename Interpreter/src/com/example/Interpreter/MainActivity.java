@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -117,7 +119,8 @@ public class MainActivity extends Activity {
         btnAddTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(config.getTargetPhotoFileName())));
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
@@ -159,23 +162,7 @@ public class MainActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bitmap targetPhoto = (Bitmap) data.getExtras().get("data");
-            FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(config.getConfigFileName());
-                targetPhoto.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            } catch (FileNotFoundException e) {
-                Log.e(LOG_TAG, "File is not found.");
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (out != null) {
-                        out.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            // Send the target photo.
         }
     }
     @Override
