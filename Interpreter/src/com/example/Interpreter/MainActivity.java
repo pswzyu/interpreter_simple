@@ -12,12 +12,15 @@ import android.widget.EditText;
 
 import java.io.*;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 
 public class MainActivity extends Activity {
+	
     private final String SHAREDPREFERENCES_NAME = "Interpreter";
     private Config config;
     private Audio audio;
+    private static Lock lock = null;  
     /**
      * Called when the activity is first created.
      */
@@ -167,7 +170,6 @@ public class MainActivity extends Activity {
 		//always run
 		//ask for voiceFile from server
 		//store in recieveFile
-		//play(String recieveFileUrl);
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
             new receiveService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
@@ -181,6 +183,7 @@ public class MainActivity extends Activity {
     	protected Void doInBackground(Void... params)  
         {  
     		try {
+    			//lock.lock();
     			String charset = "UTF-8";
     			//config = Config.getConfig();
     	        File uploadFile = new File(config.getSendFileName());
@@ -200,6 +203,7 @@ public class MainActivity extends Activity {
                 for (String line : response) {
                     System.out.println(line);
                 }
+                //lock.unlock();
             } catch (IOException ex) {
                 System.err.println(ex);
             }
@@ -217,9 +221,12 @@ public class MainActivity extends Activity {
         {  
     		ReceiveUtility re = new ReceiveUtility();
     		while(true){
-    			if(re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName())==1){    //for test only!!
-    			//if(re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName())==1){
+    			//lock.lock();
+    			int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
+    			//int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
+    			if(count!=-1){    
         			System.out.println("Received Success!");
+        			audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
         		}
         		else{
         			//System.out.println("No voice message found!");
@@ -230,6 +237,7 @@ public class MainActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+        		//lock.unlock();
     		}  
         }  
     	protected void onPostExecute(Void result)  

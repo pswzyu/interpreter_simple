@@ -33,17 +33,17 @@ public class ReceiveUtility {
 		            fs.write(buffer, 0, byteread);  
 		        } 
 		        if(bytesum == 0){
-		        	return 0;
+		        	return -1;
 		        }
 		        else{
 		        	//successful receive a new file 
 		        	count++;
-		        	return 1;
+		        	return count-1;
 		        }
 			}	
 		}catch (Exception ex) {
             System.err.println(ex);
         }
-		return 0;
+		return -1;
 	}
 }
