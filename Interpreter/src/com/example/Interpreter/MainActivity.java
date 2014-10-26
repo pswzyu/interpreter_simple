@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
         } else {
             config = readConfig();
         }
+        audio = new Audio();
 
         // Initialize UI.
           targetEdit = (EditText) findViewById(R.id.targetEdit);
@@ -69,7 +70,6 @@ public class MainActivity extends Activity {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
                         // Start recording.
-                        audio = new Audio();
                         audio.startRecording();
                         btnRecord.setText(R.string.button_recording);
                         btnRecord.setBackgroundColor(getResources().getColor(R.color.button_recording));
@@ -266,8 +266,8 @@ public class MainActivity extends Activity {
     		ReceiveUtility re = new ReceiveUtility();
     		while(true){
     			//lock.lock();
-    			int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
-    			//int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
+    			//int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
+    			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
     			if(count!=-1){    
         			System.out.println("Received Success!"+String.valueOf(count));
         			audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
