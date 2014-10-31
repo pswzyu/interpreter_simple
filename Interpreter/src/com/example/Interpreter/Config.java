@@ -6,12 +6,15 @@ public class Config implements java.io.Serializable{
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
     private final String targetPhotoFileName = filePath + "targetPhoto.jpg";
+    private final String targetPhotoFileName_scaled = filePath + "targetPhoto_scaled.jpg";
 
     private String selfId = "1";
     private String targetId = "2";
 	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
     private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
+
+    static double target_photo_scale_factor = 0.5;
 
     public String getFilePath() {
         return filePath;
@@ -39,6 +42,10 @@ public class Config implements java.io.Serializable{
 
     public String getTargetPhotoFileName() {
         return targetPhotoFileName;
+    }
+
+    public String getScaledTargetPhotoFileName() {
+        return targetPhotoFileName_scaled;
     }
 
     public String getSendPicUrl() {

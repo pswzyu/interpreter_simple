@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -182,8 +183,32 @@ public class MainActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            // resize the image before sending it
+            double scale = Config.target_photo_scale_factor;
+            Bitmap photo = BitmapFactory.decodeFile(config.getTargetPhotoFileName());
+            int new_width = (int)(photo.getWidth()*scale);
+            int new_height = (int)(photo.getHeight()*scale);
+            Bitmap scaled_photo = Bitmap.createScaledBitmap(photo, new_width, new_height, false);
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            scaled_photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+            File f = new File(config.getScaledTargetPhotoFileName());
+            try {
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+                fo.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             // Send the target photo and get the target ID.
             sendPic();
+
+            // delete the file after sending
+            File photo_fullsize = new File(config.getTargetPhotoFileName());
+            File photo_scaled = new File(config.getScaledTargetPhotoFileName());
+            photo_fullsize.delete();
+            photo_scaled.delete();
         }
     }
     @Override
