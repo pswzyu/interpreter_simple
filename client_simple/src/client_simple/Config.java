@@ -1,4 +1,4 @@
-package com.example.Interpreter;
+package client_simple;
 
 public class Config implements java.io.Serializable{
     private final String filePath = "/sdcard/interpreter/";
@@ -17,7 +17,7 @@ public class Config implements java.io.Serializable{
     private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
     private String loginUrl = "http://home.cnzy.me:8001/interpreter/login.php";
 
-    static double target_photo_scale_factor = 0.25;
+    static double target_photo_scale_factor = 0.5;
 
     public String getFilePath() {
         return filePath;

@@ -5,4 +5,5 @@
     <color name="text_background">#FFFFFF</color>
     <color name="text">#000000</color>
     <color name="button_play">#7DE539</color>
+    <color name="button_login">#7DE359</color>
 </resources>

@@ -3,24 +3,22 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-    <EditText
+    <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/button_record"
-            android:id="@+id/selfEdit"
-            android:text = "2"
-            android:hint="@string/hint_self_id"/>
-    <EditText
+            android:id="@+id/info_self"
+            android:text="@string/info_self"/>
+    <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/selfEdit"
-            android:id="@+id/targetEdit"
-            android:text = "1"
-            android:hint="@string/hint_target_id"/>
+            android:layout_above="@id/info_self"
+            android:id="@+id/info_target"
+            android:text="@string/info_target"/>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_above="@id/targetEdit"
+            android:layout_above="@id/info_target"
             android:id="@+id/text_view"
             android:background="@color/text_background"/>
     <Button

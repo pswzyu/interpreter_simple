@@ -6,7 +6,12 @@
     <string name="button_send">Send</string>
     <string name="button_back_to_record">Back to Record</string>
     <string name="button_add_target">Add Target</string>
+    <string name="button_login">Login</string>
     <string name="hint_self_id">Self ID</string>
     <string name="hint_target_id">Target ID</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
     <string name="button_play">Click to Play</string>
+    <string name="info_target">Target:</string>
+    <string name="info_self">Self:</string>
 </resources>

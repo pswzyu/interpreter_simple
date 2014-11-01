@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.*;
 import java.util.List;
@@ -24,14 +25,14 @@ import java.util.concurrent.locks.Lock;
 
 public class MainActivity extends Activity {
 	
-    private final String SHAREDPREFERENCES_NAME = "Interpreter";
+
     private final int CAMERA_REQUEST = 1;
     private final String LOG_TAG = Audio.class.getName();
     private Config config;
     private Audio audio;
 
-    private  EditText targetEdit ;
-    private  EditText selfEdit ;
+    private  TextView infoTarget ;
+    private  TextView infoSelf ;
     private  Button btnRecord ;
     private  Button btnSend ;
     private  Button btnBack ;
@@ -45,25 +46,16 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // Estimate if it's the first time to start this application.
-        SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCES_NAME, MODE_PRIVATE);
-        boolean firstStart = preferences.getBoolean("firstStart", true);
-        if (firstStart) {
-            config = Config.getConfig();
-            writeConfig(config);
-            receiveopen();
-        } else {
-            config = readConfig();
-        }
         audio = new Audio();
+        config = Config.getConfig();
 
         // Initialize UI.
-          targetEdit = (EditText) findViewById(R.id.targetEdit);
-          selfEdit = (EditText) findViewById(R.id.selfEdit);
-          btnRecord = (Button) findViewById(R.id.button_record);
-          btnSend = (Button) findViewById(R.id.button_send);
-          btnBack = (Button) findViewById(R.id.button_back_to_record);
-          btnAddTarget = (Button) findViewById(R.id.button_add_target);
+        infoTarget = (TextView) findViewById(R.id.info_target);
+        infoSelf = (TextView) findViewById(R.id.info_self);
+        btnRecord = (Button) findViewById(R.id.button_record);
+        btnSend = (Button) findViewById(R.id.button_send);
+        btnBack = (Button) findViewById(R.id.button_back_to_record);
+        btnAddTarget = (Button) findViewById(R.id.button_add_target);
         btnRecord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -105,8 +97,6 @@ public class MainActivity extends Activity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                config.setTargetId(targetEdit.getText().toString());
-                config.setSelfId(selfEdit.getText().toString());
                 send(); // Send the recorded file.
                 btnSend.setVisibility(View.INVISIBLE);
                 btnBack.setVisibility(View.INVISIBLE);
@@ -132,19 +122,9 @@ public class MainActivity extends Activity {
             }
         });
 
-        targetEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                config.setTargetId(targetEdit.getText().toString());
-            }
-        });
-
-        selfEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                config.setSelfId(selfEdit.getText().toString());
-            }
-        });
+        infoSelf.setText(getResources().getString(R.string.info_self) + " " +config.getSelfName());
+        // Start receiving the files.
+        receiveopen();
     }
 
     // Write the configuration to file.
@@ -160,25 +140,6 @@ public class MainActivity extends Activity {
         } catch(IOException i) {
             i.printStackTrace();
         }
-    }
-
-    // Read the configuration from file.
-    private Config readConfig() {
-        Config config = null;
-        try {
-            FileInputStream fileIn = new FileInputStream(config.getConfigFileName());
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            config = (Config) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch(IOException i) {
-            i.printStackTrace();
-        } catch(ClassNotFoundException c) {
-            System.out.println("Config class not found");
-            c.printStackTrace();
-        }
-
-        return config;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -350,8 +311,8 @@ public class MainActivity extends Activity {
                 // alert the user that the pic is not valid
             }else{
                 // set the targetid
-                targetEdit.setText(result);
-                // delete the tmp files after finish
+                infoTarget.setText(getResources().getString(R.string.info_target) + " " + result);
+				// delete the tmp files after finish
                 File photo_fullsize = new File(config.getTargetPhotoFileName());
                 File photo_scaled = new File(config.getScaledTargetPhotoFileName());
                 photo_fullsize.delete();

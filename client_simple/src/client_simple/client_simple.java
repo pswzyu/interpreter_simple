@@ -18,6 +18,8 @@ import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
 
 
+
+
 class client_simple{
 	static String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 	static String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
@@ -46,6 +48,7 @@ class client_simple{
 	    		System.out.println("input 2 for recieve a file");
 	    		System.out.println("input 3 for send  Pic1");
 	    		System.out.println("input 4 for send  Pic2");
+	    		System.out.println("input 5 for send  login");
 	    		System.out.println("input 0 for exit");
 	            while ((c = (char) in.read()) > 0) {
 	            	if(c == '1'){
@@ -64,6 +67,10 @@ class client_simple{
 	            		System.out.println("send Pic2");
 	            		sendPic(2);
 	            	}
+	            	else if(c == '5'){
+	            		System.out.println("login");
+	            		login();
+	            	}
 	            	else if(c == '0'){
 	            		return;
 	            	}
@@ -74,6 +81,19 @@ class client_simple{
         }
 	}
 	
+	private static void login(){
+		Config config = new Config();
+		LoginConn loginConn = new LoginConn();
+    	String username = "xinyuyua";
+    	String password = "123qwe";
+    	
+    	if(loginConn.connect(config,username, password)){
+    		System.out.println("login success!");
+    	}
+    	else{
+    		System.out.println("login fail!");
+    	}
+	}
 	private static void send(){	 
 	        try {
 				String charset = "UTF-8";
@@ -116,7 +136,6 @@ class client_simple{
             List<String> response = multipart.finish();
              
             System.out.println("SERVER REPLIED:");
-    
             for (String line : response) {
                 System.out.println(line);
             }
