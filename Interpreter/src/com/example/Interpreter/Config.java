@@ -14,7 +14,7 @@ public class Config implements java.io.Serializable{
 	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
     private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
 
-    static double target_photo_scale_factor = 0.5;
+    static double target_photo_scale_factor = 0.25;
 
     public String getFilePath() {
         return filePath;

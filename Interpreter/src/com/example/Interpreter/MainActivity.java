@@ -204,11 +204,7 @@ public class MainActivity extends Activity {
             // Send the target photo and get the target ID.
             sendPic();
 
-            // delete the file after sending
-            File photo_fullsize = new File(config.getTargetPhotoFileName());
-            File photo_scaled = new File(config.getScaledTargetPhotoFileName());
-            photo_fullsize.delete();
-            photo_scaled.delete();
+            // delete the file after sending is done in async task class
         }
     }
     @Override
@@ -355,7 +351,11 @@ public class MainActivity extends Activity {
             }else{
                 // set the targetid
                 targetEdit.setText(result);
-
+                // delete the tmp files after finish
+                File photo_fullsize = new File(config.getTargetPhotoFileName());
+                File photo_scaled = new File(config.getScaledTargetPhotoFileName());
+                photo_fullsize.delete();
+                photo_scaled.delete();
             }
         }
 
