@@ -9,7 +9,9 @@ public class Config implements java.io.Serializable{
     private final String targetPhotoFileName_scaled = filePath + "targetPhoto_scaled.jpg";
 
     private String selfId = "1";
+    private String selfName = "";
     private String targetId = "2";
+    private String targetName = "";
 	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
     private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
@@ -56,8 +58,24 @@ public class Config implements java.io.Serializable{
         this.selfId = selfId;
     }
 
+    public String getSelfName() {
+        return selfName;
+    }
+
+    public void setSelfName(String selfName) {
+        this.selfName = selfName;
+    }
+
     public void setTargetId(String targetId) {
         this.targetId = targetId;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
     }
 
     private static final class ConfigLoader {
