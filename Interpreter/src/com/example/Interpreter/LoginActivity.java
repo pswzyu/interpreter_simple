@@ -22,6 +22,7 @@ public class LoginActivity extends Activity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        config = Config.getConfig();
         // Estimate if it's the first time to start this application.
         SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
@@ -30,12 +31,10 @@ public class LoginActivity extends Activity  {
             writeConfig(config);
             SharedPreferences.Editor prefEditor = preferences.edit();
             prefEditor.putBoolean("firstStart", false);
-            prefEditor.apply();
+            prefEditor.commit();
         } else {
             config = readConfig();
         }
-
-        config = Config.getConfig();
 
         btnLogin = (Button) findViewById(R.id.button_login);
         editUsername = (EditText) findViewById(R.id.edit_username);
@@ -68,7 +67,6 @@ public class LoginActivity extends Activity  {
 
     // Read the configuration from file.
     private Config readConfig() {
-        Config config = null;
         try {
             FileInputStream fileIn = new FileInputStream(config.getConfigFileName());
             ObjectInputStream in = new ObjectInputStream(fileIn);
