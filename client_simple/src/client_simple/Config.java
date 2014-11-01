@@ -1,4 +1,4 @@
-package com.example.Interpreter;
+package client_simple;
 
 public class Config implements java.io.Serializable{
     private final String filePath = "/sdcard/interpreter/";

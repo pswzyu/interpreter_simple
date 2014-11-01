@@ -11,6 +11,7 @@ import android.widget.EditText;
 import java.io.*;
 
 
+
 public class LoginActivity extends Activity  {
     private final String SHAREDPREFERENCES_NAME = "Interpreter";
     private Config config;
@@ -44,8 +45,22 @@ public class LoginActivity extends Activity  {
             @Override
             public void onClick(View v) {
                 // Send the username and password.
-                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(loginIntent);
+            	Config config = new Config();
+            	
+            	LoginConn loginConn = new LoginConn();
+            	String username = editUsername.getText().toString();
+            	String password = editPassword.getText().toString();
+            	
+            	if(loginConn.connect(config,username, password)){
+            		System.out.println("login success!");
+            		 Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
+                     startActivity(loginIntent);
+            	}           
+            	else{
+            		// login fail
+            		System.out.println("login fail!");
+            		// write something to handle this
+            	}
             }
         });
     }
