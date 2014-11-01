@@ -12,6 +12,7 @@ public class Config implements java.io.Serializable{
     private String selfName = "";
     private String targetId = "2";
     private String targetName = "";
+    private String targetRealName = "";
 	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
     private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
@@ -77,6 +78,14 @@ public class Config implements java.io.Serializable{
 
     public void setTargetName(String targetName) {
         this.targetName = targetName;
+    }
+
+    public String getTargetRealName() {
+        return targetRealName;
+    }
+
+    public void setTargetRealName(String targetRealName) {
+        this.targetRealName = targetRealName;
     }
 
     private static final class ConfigLoader {
