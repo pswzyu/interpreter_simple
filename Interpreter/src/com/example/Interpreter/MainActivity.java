@@ -47,7 +47,9 @@ public class MainActivity extends Activity {
 
         audio = new Audio();
         config = Config.getConfig();
-
+		if(config.getSelfId().equals("") ){
+			System.out.println("here");
+		}
         // Initialize UI.
         btnRecord = (Button) findViewById(R.id.button_record);
         btnSend = (Button) findViewById(R.id.button_send);
@@ -294,46 +296,60 @@ public class MainActivity extends Activity {
                 multipart.addFormField("action", "recognition");
                 multipart.addFormField("self_id", "1");
                 multipart.addFilePart("pic_file", uploadFile);
-
+                Log.i("time","back");
                 List<String> response = multipart.finish();
                 try {
-					Thread.sleep(1000);
+					Thread.sleep(3000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 System.out.println("SERVER REPLIED:");
-                	
+                Log.i("time","back");
                 for (String line : response) {
                     System.out.println(line);
                 }
                 String result = response.get(0);
-                
-                if (result == null || result.equals("NULL") )
-                {
-                    // alert the user that the pic is not valid
-                    Toast toast = Toast.makeText(getApplicationContext(), "Not a valid target!", Toast.LENGTH_SHORT);
-                    toast.show();
-                }else{
-                
-                    // set the targetid
-                	config.setTargetId(result);
-                    btnAddTarget.setText(config.getTargetId());
-
-    				// delete the tmp files after finish
-                    File photo_fullsize = new File(config.getTargetPhotoFileName());
-                    File photo_scaled = new File(config.getScaledTargetPhotoFileName());
-                    photo_fullsize.delete();
-                    photo_scaled.delete();
-                }
+                Log.i("time","back");
+                return result;
             } catch (IOException ex) {
                 System.err.println(ex);
             }
+            Log.i("time","back null");
             return null;
         }
         protected void onPostExecute(String result)
         {
+        	Log.i("time","front");
+        	if (result == null || result.equals("NULL") )
+            {
+                // alert the user that the pic is not valid
+                Toast toast = Toast.makeText(getApplicationContext(), "Not a valid target!", Toast.LENGTH_SHORT);
+                toast.show();
+            }else{
             
+                // set the targetid
+            	config.setTargetId(result);
+                
+            	Log.i("time","front");
+				// delete the tmp files after finish
+                File photo_fullsize = new File(config.getTargetPhotoFileName());
+                File photo_scaled = new File(config.getScaledTargetPhotoFileName());
+                photo_fullsize.delete();
+                photo_scaled.delete();
+            	Log.i("time","front");
+            	btnAddTarget.setText(config.getTargetId());
+            }
+//        	while(config.getTargetId().equals("")){
+//        		try {
+//        			Log.i("time","front");
+//					Thread.sleep(100);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//        	}
+
         }
 
     }

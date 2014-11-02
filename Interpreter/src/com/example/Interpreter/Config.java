@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-public class Config implements java.io.Serializable{
-    private final String filePath = "/sdcard/interpreter/";
-    private final String sendFileName = filePath + "send";
-    private final String receiveFileName = filePath + "receive";
-    private final String configFileName = filePath + "config.cfg";
-    private final String targetPhotoFileName = filePath + "targetPhoto.jpg";
-    private final String targetPhotoFileName_scaled = filePath + "targetPhoto_scaled.jpg";
+public class Config{
+    private static final String filePath = "/sdcard/interpreter/";
+    private static final String sendFileName = filePath + "send";
+    private static final String receiveFileName = filePath + "receive";
+    private static final String configFileName = filePath + "config.cfg";
+    private static final String targetPhotoFileName = filePath + "targetPhoto.jpg";
+    private static final String targetPhotoFileName_scaled = filePath + "targetPhoto_scaled.jpg";
 
     private String selfId = "";
     private String selfName = "";
