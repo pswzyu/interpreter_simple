@@ -1,5 +1,10 @@
 package com.example.Interpreter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 public class Config implements java.io.Serializable{
     private final String filePath = "/sdcard/interpreter/";
     private final String sendFileName = filePath + "send";
@@ -84,6 +89,11 @@ public class Config implements java.io.Serializable{
     }
 
     public static Config getConfig() {
+    	File root_path = new File(ConfigLoader.config.filePath);
+    	if (!root_path.exists())
+    	{
+    		root_path.mkdir();
+    	}
         return ConfigLoader.config;
     }
     
