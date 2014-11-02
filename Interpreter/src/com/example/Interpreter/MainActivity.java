@@ -292,7 +292,7 @@ public class MainActivity extends Activity {
                 //multipart.addHeaderField("User-Agent", "CodeJava");
                 //multipart.addHeaderField("Test-Header", "Header-Value");
                 multipart.addFormField("action", "recognition");
-                multipart.addFormField("self_id", config.getSelfId());
+                multipart.addFormField("self_id", "1");
                 multipart.addFilePart("pic_file", uploadFile);
 
                 List<String> response = multipart.finish();

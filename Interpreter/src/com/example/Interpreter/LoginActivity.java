@@ -29,7 +29,13 @@ public class LoginActivity extends Activity  {
         SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
         if (firstStart) {
-            config = Config.getConfig();
+            // Create the root directory.
+            File root_path = new File(config.getFilePath());
+            if (!root_path.exists())
+            {
+                root_path.mkdir();
+            }
+
             writeConfig(config);
             SharedPreferences.Editor prefEditor = preferences.edit();
             prefEditor.putBoolean("firstStart", false);
