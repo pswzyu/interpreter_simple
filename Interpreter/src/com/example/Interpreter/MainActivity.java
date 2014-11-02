@@ -320,7 +320,6 @@ public class MainActivity extends Activity {
                 // set the targetid
                 btnAddTarget.setText(config.getTargetRealName()+" (Change Target)");
 
-
 				// delete the tmp files after finish
                 File photo_fullsize = new File(config.getTargetPhotoFileName());
                 File photo_scaled = new File(config.getScaledTargetPhotoFileName());
