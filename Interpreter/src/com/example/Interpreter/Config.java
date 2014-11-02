@@ -25,6 +25,8 @@ public class Config implements java.io.Serializable{
 
     static double target_photo_scale_factor = 0.25;
 
+    private static final Config config = new Config();
+
     public String getFilePath() {
         return filePath;
     }
@@ -93,17 +95,8 @@ public class Config implements java.io.Serializable{
         this.targetRealName = targetRealName;
     }
 
-    private static final class ConfigLoader {
-        private static final Config config = new Config();
-    }
-
     public static Config getConfig() {
-    	File root_path = new File(ConfigLoader.config.filePath);
-    	if (!root_path.exists())
-    	{
-    		root_path.mkdir();
-    	}
-        return ConfigLoader.config;
+        return config;
     }
     
     public String getSendUrl(){
