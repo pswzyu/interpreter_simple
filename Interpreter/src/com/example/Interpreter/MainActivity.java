@@ -285,25 +285,47 @@ public class MainActivity extends Activity {
         {
             try {
                 String charset = "UTF-8";
-                File uploadFile = new File(config.getTargetPhotoFileName());
+                File uploadFile = new File(config.getScaledTargetPhotoFileName());
 
                 SendUtility multipart = new SendUtility(config.getSendPicUrl(), charset);
 
                 //multipart.addHeaderField("User-Agent", "CodeJava");
                 //multipart.addHeaderField("Test-Header", "Header-Value");
                 multipart.addFormField("action", "recognition");
-                multipart.addFormField("self_id", config.getSelfId());
+                multipart.addFormField("self_id", "1");
                 multipart.addFilePart("pic_file", uploadFile);
 
                 List<String> response = multipart.finish();
-
+                try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 System.out.println("SERVER REPLIED:");
-
-
+                	
                 for (String line : response) {
                     System.out.println(line);
                 }
-                return response.get(0);
+                String result = response.get(0);
+                
+                if (result == null || result.equals("NULL") )
+                {
+                    // alert the user that the pic is not valid
+                    Toast toast = Toast.makeText(getApplicationContext(), "Not a valid target!", Toast.LENGTH_SHORT);
+                    toast.show();
+                }else{
+                
+                    // set the targetid
+                	config.setTargetId(result);
+                    btnAddTarget.setText(config.getTargetId());
+
+    				// delete the tmp files after finish
+                    File photo_fullsize = new File(config.getTargetPhotoFileName());
+                    File photo_scaled = new File(config.getScaledTargetPhotoFileName());
+                    photo_fullsize.delete();
+                    photo_scaled.delete();
+                }
             } catch (IOException ex) {
                 System.err.println(ex);
             }
@@ -311,21 +333,7 @@ public class MainActivity extends Activity {
         }
         protected void onPostExecute(String result)
         {
-            if (result == null || result.equals("NULL"))
-            {
-                // alert the user that the pic is not valid
-                Toast toast = Toast.makeText(getApplicationContext(), "Not a valid target!", Toast.LENGTH_SHORT);
-                toast.show();
-            }else{
-                // set the targetid
-                btnAddTarget.setText(config.getTargetRealName()+" (Change Target)");
-
-				// delete the tmp files after finish
-                File photo_fullsize = new File(config.getTargetPhotoFileName());
-                File photo_scaled = new File(config.getScaledTargetPhotoFileName());
-                photo_fullsize.delete();
-                photo_scaled.delete();
-            }
+            
         }
 
     }
