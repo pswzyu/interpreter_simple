@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.*;
 import java.util.List;
@@ -31,8 +32,6 @@ public class MainActivity extends Activity {
     private Config config;
     private Audio audio;
 
-    private  TextView infoTarget ;
-    private  TextView infoSelf ;
     private  Button btnRecord ;
     private  Button btnSend ;
     private  Button btnBack ;
@@ -50,8 +49,6 @@ public class MainActivity extends Activity {
         config = Config.getConfig();
 
         // Initialize UI.
-        infoTarget = (TextView) findViewById(R.id.info_target);
-        infoSelf = (TextView) findViewById(R.id.info_self);
         btnRecord = (Button) findViewById(R.id.button_record);
         btnSend = (Button) findViewById(R.id.button_send);
         btnBack = (Button) findViewById(R.id.button_back_to_record);
@@ -97,6 +94,12 @@ public class MainActivity extends Activity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (config.getTargetId().equals("")) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Please add target!", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
+
                 send(); // Send the recorded file.
                 btnSend.setVisibility(View.INVISIBLE);
                 btnBack.setVisibility(View.INVISIBLE);
@@ -113,16 +116,21 @@ public class MainActivity extends Activity {
             }
         });
 
+        if (!config.getTargetId().equals("")) {
+            btnAddTarget.setText(config.getTargetRealName()+" (Change Target)");
+        }
         btnAddTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(config.getTargetPhotoFileName())));
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                if (!config.getTargetId().equals("")) {
+                    btnAddTarget.setText(config.getTargetRealName()+" (Change Target)");
+                }
             }
         });
 
-        infoSelf.setText(getResources().getString(R.string.info_self) + " " + config.getSelfId());
         // Start receiving the files.
         receiveopen();
     }
@@ -311,7 +319,8 @@ public class MainActivity extends Activity {
                 // alert the user that the pic is not valid
             }else{
                 // set the targetid
-                infoTarget.setText(getResources().getString(R.string.info_target) + " " + result);
+                btnAddTarget.setText(result);
+
 				// delete the tmp files after finish
                 File photo_fullsize = new File(config.getTargetPhotoFileName());
                 File photo_scaled = new File(config.getScaledTargetPhotoFileName());

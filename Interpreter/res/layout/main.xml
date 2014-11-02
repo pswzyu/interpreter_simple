@@ -3,24 +3,6 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-    <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_above="@+id/button_record"-->
-            <!--android:id="@+id/info_self"-->
-            <!--android:text="@string/info_self"/>-->
-    <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_above="@id/info_self"-->
-            <!--android:id="@+id/info_target"-->
-            <!--android:text="@string/info_target"/>-->
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/button_record"
-            android:id="@+id/text_view"
-            android:background="@color/text_background"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -29,6 +11,12 @@
             android:text="@string/button_waiting"
             android:textColor="@color/text"
             android:background="@color/button_waiting"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/button_record"
+            android:id="@+id/text_view"
+            android:background="@color/text_background"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

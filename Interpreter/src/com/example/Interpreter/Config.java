@@ -13,9 +13,9 @@ public class Config implements java.io.Serializable{
     private final String targetPhotoFileName = filePath + "targetPhoto.jpg";
     private final String targetPhotoFileName_scaled = filePath + "targetPhoto_scaled.jpg";
 
-    private String selfId = "1";
+    private String selfId = "";
     private String selfName = "";
-    private String targetId = "2";
+    private String targetId = "";
     private String targetName = "";
     private String targetRealName = "";
 	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
