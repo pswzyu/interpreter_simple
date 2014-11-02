@@ -125,9 +125,6 @@ public class MainActivity extends Activity {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(config.getTargetPhotoFileName())));
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                if (!config.getTargetId().equals("")) {
-                    btnAddTarget.setText(config.getTargetRealName()+" (Change Target)");
-                }
             }
         });
 
@@ -317,9 +314,12 @@ public class MainActivity extends Activity {
             if (result == null || result.equals("NULL"))
             {
                 // alert the user that the pic is not valid
+                Toast toast = Toast.makeText(getApplicationContext(), "Not a valid target!", Toast.LENGTH_SHORT);
+                toast.show();
             }else{
                 // set the targetid
-                btnAddTarget.setText(result);
+                btnAddTarget.setText(config.getTargetRealName()+" (Change Target)");
+
 
 				// delete the tmp files after finish
                 File photo_fullsize = new File(config.getTargetPhotoFileName());
