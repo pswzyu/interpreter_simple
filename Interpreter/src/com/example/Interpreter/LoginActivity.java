@@ -3,6 +3,7 @@ package com.example.Interpreter;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -45,22 +46,7 @@ public class LoginActivity extends Activity  {
             @Override
             public void onClick(View v) {
                 // Send the username and password.
-            	Config config = new Config();
-            	
-            	LoginConn loginConn = new LoginConn();
-            	String username = editUsername.getText().toString();
-            	String password = editPassword.getText().toString();
-            	
-            	if(loginConn.connect(config,username, password)){
-            		System.out.println("login success!");
-            		 Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-                     startActivity(loginIntent);
-            	}           
-            	else{
-            		// login fail
-            		System.out.println("login fail!");
-            		// write something to handle this
-            	}
+                new Login().execute();
             }
         });
     }
@@ -98,5 +84,26 @@ public class LoginActivity extends Activity  {
         return config;
     }
 
+    private class Login extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            LoginConn loginConn = new LoginConn();
+            String username = editUsername.getText().toString();
+            String password = editPassword.getText().toString();
+
+            if(loginConn.connect(config,username, password)){
+                System.out.println("login success!");
+                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(loginIntent);
+            }
+            else{
+                // login fail
+                System.out.println("login fail!");
+                // write something to handle this
+            }
+
+            return null;
+        }
+    }
 }

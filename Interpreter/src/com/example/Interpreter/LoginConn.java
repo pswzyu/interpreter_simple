@@ -19,7 +19,8 @@ public class LoginConn {
 
         SendUtility multipart;
 		try {
-			multipart = new SendUtility(config.getloginUrl(), charset);
+            String url =     config.getloginUrl();
+			multipart = new SendUtility(url, charset);
 			//multipart.addHeaderField("User-Agent", "CodeJava");
 	        //multipart.addHeaderField("Test-Header", "Header-Value");
 	        multipart.addFormField("username", username);

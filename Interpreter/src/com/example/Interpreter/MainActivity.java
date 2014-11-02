@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        infoSelf.setText(getResources().getString(R.string.info_self) + " " +config.getSelfName());
+        infoSelf.setText(getResources().getString(R.string.info_self) + " " + config.getSelfId());
         // Start receiving the files.
         receiveopen();
     }
