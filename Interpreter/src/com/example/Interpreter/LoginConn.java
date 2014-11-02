@@ -37,6 +37,7 @@ public class LoginConn {
 	        	String temp[] = a.split(",");
 	        	config.setSelfId(temp[0]);
 	        	/////write realname
+	        	config.setSelfName(temp[1]);
 	        	return true;
 	        }
 		} catch (IOException e) {

@@ -294,7 +294,7 @@ public class MainActivity extends Activity {
                 //multipart.addHeaderField("User-Agent", "CodeJava");
                 //multipart.addHeaderField("Test-Header", "Header-Value");
                 multipart.addFormField("action", "recognition");
-                multipart.addFormField("self_id", "1");
+                multipart.addFormField("self_id", config.getSelfId());
                 multipart.addFilePart("pic_file", uploadFile);
                 Log.i("time","back");
                 List<String> response = multipart.finish();
@@ -327,10 +327,12 @@ public class MainActivity extends Activity {
                 Toast toast = Toast.makeText(getApplicationContext(), "Not a valid target!", Toast.LENGTH_SHORT);
                 toast.show();
             }else{
-            
+            	
                 // set the targetid
-            	config.setTargetId(result);
-                
+            	String temp[] = result.split(",");
+	        	/////write realname
+            	config.setTargetId(temp[0]);
+                config.setTargetRealName(temp[1]);
             	Log.i("time","front");
 				// delete the tmp files after finish
                 File photo_fullsize = new File(config.getTargetPhotoFileName());
