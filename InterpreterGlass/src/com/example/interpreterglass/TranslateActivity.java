@@ -39,6 +39,10 @@ public class TranslateActivity extends Activity {
 	TextView tvTargetRealName;
 	TextView tvRecording;
 	
+	receiveService m_receiveService;
+	
+	long record_started_time = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,12 +52,32 @@ public class TranslateActivity extends Activity {
 		config = Config.getConfig();
 		audio = new Audio();
 		
-		receiveopen();
-		
 		mGestureDetector = createGestureDetector(this);
 		
 		tvTargetRealName = (TextView) findViewById(R.id.tvTargetRealName);
 		tvRecording = (TextView) findViewById(R.id.tvRecording);
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		
+		//always run
+		//ask for voiceFile from server
+		//store in recieveFile
+		m_receiveService = new receiveService();
+	    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	m_receiveService.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	    } else {
+	    	m_receiveService.execute();
+	    }
+		
+		super.onResume();
+	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		m_receiveService.should_run = false;
+		super.onPause();
 	}
 	
 	@Override
@@ -100,12 +124,30 @@ public class TranslateActivity extends Activity {
 				//System.out.println("Pre:"+previousCount+", Now:"+currentCount);
 				if (previousCount == 0 && currentCount == 1) // start recording
 				{
-					audio.startRecording();
+					if (config.getTargetId().equals(""))
+					{
+						tvRecording.setText("Please take a picture!");
+					}else{
+						record_started_time = System.currentTimeMillis();
+						tvRecording.setText("Recording...");
+						tvRecording.setBackgroundColor(0xFF00FF00);
+						audio.startRecording();
+					}
 				}
 				if (previousCount == 1 && currentCount == 0)
 				{
 					audio.stopRecording();
-					send(); // Send the recorded file.
+					long time_now = System.currentTimeMillis();
+					if (time_now - record_started_time < 800)
+					{
+						tvRecording.setText("Speech is too short!");
+					}else
+					{
+						tvRecording.setText("Sending...");
+						send(); // Send the recorded file.
+					}
+					tvRecording.setBackgroundColor(0xFFFFFFFF);
+					
 				}
 			}
 		});
@@ -236,18 +278,6 @@ public class TranslateActivity extends Activity {
         }
 
     }
-
-    private void receiveopen(){
-		//always run
-		//ask for voiceFile from server
-		//store in recieveFile
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
-            new receiveService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            new receiveService().execute();
-        }
-    	//new receiveService().execute();
-	}
     
     private class SendService extends AsyncTask<Void, Void, Void>  
     {  
@@ -282,16 +312,17 @@ public class TranslateActivity extends Activity {
         }  
     	protected void onPostExecute(Void result)  
         {  
-     
+    		tvRecording.setText("Sent...");
         } 
     }
     
     private class receiveService extends AsyncTask<Void, Void, Void>  
-    {  
+    {
+    	boolean should_run = true;
     	protected Void doInBackground(Void... params)  
         {  
     		ReceiveUtility re = new ReceiveUtility();
-    		while(true){
+    		while(should_run){
     			//lock.lock();
     			//int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
     			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
@@ -309,7 +340,8 @@ public class TranslateActivity extends Activity {
 					e.printStackTrace();
 				}
         		//lock.unlock();
-    		}  
+    		}
+    		return null;
         }  
     	protected void onPostExecute(Void result)  
         {  
@@ -356,6 +388,11 @@ public class TranslateActivity extends Activity {
                 // alert the user that the pic is not valid
             	tvTargetRealName.setText("Recognition Failed, please try again!");
             }else{
+            	// set the targetid
+            	String temp[] = result.split(",");
+	        	/////write realname
+            	config.setTargetId(temp[0]);
+                config.setTargetRealName(temp[1]);
                 // set the targetid
             	tvTargetRealName.setText(result);
 				// delete the tmp files after finish

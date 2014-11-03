@@ -36,6 +36,8 @@ public class MainActivity extends Activity {
     private  Button btnSend ;
     private  Button btnBack ;
     private  Button btnAddTarget ;
+    
+    receiveService m_receiveService;
 
     /**
      * Called when the activity is first created.
@@ -129,10 +131,30 @@ public class MainActivity extends Activity {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
-
-        // Start receiving the files.
-        receiveopen();
     }
+    
+    @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		
+		//always run
+		//ask for voiceFile from server
+		//store in recieveFile
+		m_receiveService = new receiveService();
+	    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+	    	m_receiveService.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	    } else {
+	    	m_receiveService.execute();
+	    }
+		
+		super.onResume();
+	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		m_receiveService.should_run = false;
+		super.onPause();
+	}
 
     // Write the configuration to file.
     private void writeConfig(Config config) {
@@ -198,18 +220,6 @@ public class MainActivity extends Activity {
         }
 
     }
-
-    private void receiveopen(){
-		//always run
-		//ask for voiceFile from server
-		//store in recieveFile
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
-            new receiveService().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            new receiveService().execute();
-        }
-    	//new receiveService().execute();
-	}
     
     private class SendService extends AsyncTask<Void, Void, Void>  
     {  
@@ -249,11 +259,12 @@ public class MainActivity extends Activity {
     }
     
     private class receiveService extends AsyncTask<Void, Void, Void>  
-    {  
+    {
+    	boolean should_run = true;
     	protected Void doInBackground(Void... params)  
         {  
     		ReceiveUtility re = new ReceiveUtility();
-    		while(true){
+    		while(should_run){
     			//lock.lock();
     			//int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
     			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
@@ -271,7 +282,8 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
         		//lock.unlock();
-    		}  
+    		}
+    		return null;
         }  
     	protected void onPostExecute(Void result)  
         {  

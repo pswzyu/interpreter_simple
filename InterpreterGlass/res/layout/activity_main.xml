@@ -5,18 +5,12 @@
     tools:context="${packageName}.${activityClass}" >
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="" />
-
-    <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:text="@string/instruction" />
+        android:text="@string/instruction"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/tvSelectedUser"
@@ -24,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
-        android:text="Selected User" />
+        android:text="Selected User"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/tvLoginResult"
@@ -32,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvSelectedUser"
-        android:text="" />
+        android:text=""
+        android:textSize="25dp" />
 
 </RelativeLayout>

@@ -62,9 +62,9 @@ public class MainActivity extends Activity {
 		passwords.add("123qwe");
 		passwords.add("123qwe");
 		user_infos = new HashMap<String, String>();
-		user_infos.put("pswzyu", "RealName: zhangyu, Speaks English");
-		user_infos.put("xinyuyua", "RealName: yuanxinyu, Speaks Chinese");
-		user_infos.put("sunsetrider", "RealName: yongshengsong, Speaks Chinese");
+		user_infos.put("pswzyu", "RealName: zhangyu\nSpeaks English");
+		user_infos.put("xinyuyua", "RealName: yuanxinyu\nSpeaks Chinese");
+		user_infos.put("sunsetrider", "RealName: yongshengsong\nSpeaks Chinese");
 		////////////////////////
 
 		tv_SelectedUser = (TextView) findViewById(R.id.tvSelectedUser);
