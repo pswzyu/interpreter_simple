@@ -50,6 +50,29 @@ class GoogleServices extends IServices {
         unlink($ckfile);
         return $output;
     }
+    
+    public function speechToText($fname)
+    {
+        //echo $fname;
+        $reply = shell_exec("curl -X POST --data-binary @'{$fname}' --header 'Content-Type: audio/l16; rate=16000;' 'https://www.google.com/speech-api/v2/recognize?output=json&lang=en-us&key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw'");
+        //echo $reply;
+        $two_json = explode("}\n{", $reply);
+        if(count($two_json) < 2)
+        {
+            return "";
+        }else{
+            $first_json = $two_json[0]."}";
+            $second_json = "{".$two_json[1];
+            $best = json_decode($first_json);
+            $alter = json_decode($second_json);
+
+            // dont know what's the first portion of the string do
+    //        print_r($best->result);
+    //        print_r($alter->result[0]->alternative[0]->transcript);
+
+            return $alter->result[0]->alternative[0]->transcript;
+        }
+    }
 
     public function translate($input_str, $input_lang, $output_lang)
     {

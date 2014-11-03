@@ -7,7 +7,7 @@ include_once(FROOT."classes/XunfeiServices.php");
 
 $send_time = intval(microtime($get_as_float=true)*1000);
 //print_r(microtime());
-//echo $send_time;
+//echo $send_time."<br/>";
 
 if (empty($_GET["self_id"]))
 {
@@ -19,6 +19,7 @@ if (empty($_GET["self_id"]))
     $udb->query("SELECT * FROM `chat_message` WHERE to_user_id ='{$self_id}'
         ORDER BY `send_timestamp` LIMIT 0,1");
     $result = $udb->fetch_assoc();
+    $udb->query("DELETE FROM `chat_message` WHERE id='{$result["id"]}';");
     if (!$result)
     {
         //echo "empty";
@@ -30,6 +31,9 @@ if (empty($_GET["self_id"]))
         $udb->query("SELECT * FROM `user_info` WHERE id={$result["from_user_id"]}");
         $from_userinfo = $udb->fetch_assoc();
         
+        //print_r($self_userinfo);
+        //print_r($from_userinfo);
+        
         $att_services = new ATTServices();
         $google_services = new GoogleServices();
         $xunfei_services = new XunfeiServices($xunfei_bin_dir);
@@ -37,27 +41,31 @@ if (empty($_GET["self_id"]))
         if ($from_userinfo["language"] == "zh_CN")
         {
             $from_text = $xunfei_services->speechToText($result["sound_filename"]);
+            if ($from_text == "")
+                $from_text = "不可识别的音频";
         }elseif($from_userinfo["language"] == "en")
         {
-            $from_text = $att_services->speechToText($result["sound_filename"]);
+            $from_text = $google_services->speechToText($result["sound_filename"]);
+            if ($from_text == "")
+                $from_text = "unrecognized audio";
         }else
         {
-            
+            echo "Unknown language from";
         }
         //$from_userinfo
-        //echo "from_test:".$from_text;
+        //echo "from_test:".$from_text."  time".intval(microtime($get_as_float=true)*1000)."<br/>";
         // translate
         $to_text = $google_services->translate($from_text, $from_userinfo["language"],
                 $self_userinfo["language"]);
         
-        //echo $to_text;
+        //echo $to_text."  time:".intval(microtime($get_as_float=true)*1000)."<br/>";
         // text to speech
         $file_info = pathinfo($result["sound_filename"]);
         $fn_before_conv = $file_info['dirname'].DIRECTORY_SEPARATOR .
                 $file_info['filename']."_done.wav";
 //        $fn_after_conv = $file_info['dirname'].DIRECTORY_SEPARATOR .
 //                $file_info['filename']."_done.acc";
-        $fn_after_conv = $fn_before_conv;
+        
         
         if ($self_userinfo["language"] == "zh_CN")
         {
@@ -67,15 +75,16 @@ if (empty($_GET["self_id"]))
             $att_services->textToSpeech($to_text, $fn_before_conv);
         }else
         {
-            
+            echo "Unknown language to";
         }
+        //echo "finish  ".intval(microtime($get_as_float=true)*1000)."<br/>";
         
         // convert to acc
         //shell_exec("ffmpeg -i {$fn_before_conv}  -acodec libfaac {$fn_after_conv}");
-        
+        $fn_after_conv = $fn_before_conv;
         
         if (file_exists($fn_after_conv))  
-        {   
+        {
             
             header('Content-Description: File Transfer');     
             header('Content-Type: application/octet-stream');     
@@ -89,11 +98,16 @@ if (empty($_GET["self_id"]))
             flush();     
             readfile($fn_after_conv);   // 输出文件内容
             
-            $udb->query("DELETE FROM `chat_message` WHERE id='{$result["id"]}';");
             unlink($result["sound_filename"]);
             unlink($fn_before_conv);
+            
+            
             //unlink($fn_after_conv);
             
+            //$udb->query("DELETE FROM `chat_message` WHERE id='{$result["id"]}';");
+            
+        }else{
+            echo "File not exist";
         }
     }
 

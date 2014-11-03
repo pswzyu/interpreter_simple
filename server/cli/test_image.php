@@ -18,7 +18,7 @@ $api = new FacePPClientDemo($api_key, $api_secret);
 $group_name = $argv[1];
 $filename = $argv[2];
 
-// call api to create the group name
+// call api to recognize person in the pic
 $result = identify($api, $filename, $group_name);
 
 echo $result;
@@ -34,8 +34,8 @@ function identify(&$api, $filename, $group_name)
 	if (empty($result->face))
 		return false;
 	// skip photo with multiple faces
-	if (count($result->face) > 1)
-		return false;
+//	if (count($result->face) > 1)
+//		return false;
 	$face = $result->face[0];
 	// skip if no person returned
 	if (count($face->candidate) < 1)

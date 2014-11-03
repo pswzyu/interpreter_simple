@@ -51,6 +51,10 @@ class ATTServices extends IServices {
     {
         // Translate file
         $response = $this->speechSrvc->speechToText($fname, 'Generic');
+        if (!$response->getNBest())
+        {
+            return "";
+        }
         return $response->getNBest()->getHypothesis();
     }
     public function translate($input_str, $input_lang, $output_lang)

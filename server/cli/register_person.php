@@ -40,8 +40,6 @@ $face_ids = array();
 $api->person_delete($person_name);
 // create a new person for this face
 $api->person_create($person_name);
-// add face into new person
-$api->person_add_face($face_id, $person_name);
 
 // for each picture, detect faces in the picture
 foreach ($pics as $one_pic)
