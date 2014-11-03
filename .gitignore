@@ -6,6 +6,8 @@ Interpreter/.idea
 Interpreter/out
 Interpreter/gen
 Interpreter/bin
+Interpreter/local.properties
+
 InterpreterGlass/bin
 InterpreterGlass/gen
 InterpreterGlass/.settings
