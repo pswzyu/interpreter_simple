@@ -18,10 +18,14 @@ public class Config implements java.io.Serializable{
     private String targetId = "2";
     private String targetName = "";
     private String targetRealName = "";
-	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
-	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
-    private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
-    private String loginUrl = "http://home.cnzy.me:8001/interpreter/login.php";
+//	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
+//	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
+//  private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
+//  private String loginUrl = "http://home.cnzy.me:8001/interpreter/login.php";
+    private String sendUrl = "http://198.199.97.166/interpreter/server/upload.php";
+    private String receiveUrl = "http://198.199.97.166/interpreter/server/receive.php";
+    private String sendPicUrl = "http://198.199.97.166/interpreter/server/face.php";
+    private String loginUrl = "http://198.199.97.166/interpreter/server/login.php";
 
     static double target_photo_scale_factor = 0.25;
 
