@@ -168,11 +168,14 @@ public class MainActivity extends Activity {
 					all_response += line;
 				}
 				String[] splited = all_response.split(",");
-				user_id = splited[0];
-				
-				if (!user_id.equals("0"))
+				if (splited.length > 0)
 				{
-					real_name = splited[1];
+					user_id = splited[0];
+					
+					if (!user_id.equals("0"))
+					{
+						real_name = splited[1];
+					}
 				}
 				
 				// parse the server response
@@ -194,6 +197,7 @@ public class MainActivity extends Activity {
 			}
 			// set the id in config object
 			config.setSelfId(user_id);
+			config.setSelfName(usernames.get(current_user));
 			//startActivity();
 			Intent intent = new Intent(MainActivity.this, TranslateActivity.class);
 			startActivity(intent);
@@ -236,4 +240,12 @@ public class MainActivity extends Activity {
 
 		return config;
 	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		writeConfig(config);
+		super.onDestroy();
+	}
+	
 }

@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
-		m_receiveService.should_run = false;
+		m_receiveService.cancel(false);
 		super.onPause();
 	}
 
@@ -260,11 +260,10 @@ public class MainActivity extends Activity {
     
     private class receiveService extends AsyncTask<Void, Void, Void>  
     {
-    	boolean should_run = true;
     	protected Void doInBackground(Void... params)  
         {  
     		ReceiveUtility re = new ReceiveUtility();
-    		while(should_run){
+    		while(!isCancelled()){
     			//lock.lock();
     			//int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
     			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());

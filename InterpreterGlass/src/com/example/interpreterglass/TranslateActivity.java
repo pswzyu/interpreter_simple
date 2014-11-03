@@ -32,6 +32,7 @@ import android.widget.TextView;
 public class TranslateActivity extends Activity {
 
 	private final int CAMERA_REQUEST = 1;
+	private static final String LOGTAG = "TranslateActivity";
 	Config config;
 	private Audio audio;
 	private GestureDetector mGestureDetector;
@@ -76,7 +77,8 @@ public class TranslateActivity extends Activity {
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
-		m_receiveService.should_run = false;
+		// stop the while loop in receive thread, but let it finish
+		m_receiveService.cancel(false);
 		super.onPause();
 	}
 	
@@ -99,7 +101,6 @@ public class TranslateActivity extends Activity {
 					return true;
 				} else if (gesture == Gesture.TWO_TAP) {
 					// do something on two finger tap
-					Log.d("tag", config.getTargetPhotoFileName());
 					Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(config.getTargetPhotoFileName())));
 	                startActivityForResult(cameraIntent, CAMERA_REQUEST);
@@ -141,13 +142,14 @@ public class TranslateActivity extends Activity {
 					if (time_now - record_started_time < 1500)
 					{
 						tvRecording.setText("Speech is too short!");
-					}else
+					}else if (config.getTargetId().equals(""))
 					{
+						tvRecording.setText("Please take a picture!");
+					}else{
 						tvRecording.setText("Sending...");
 						send(); // Send the recorded file.
 					}
 					tvRecording.setBackgroundColor(0xFFFFFFFF);
-					
 				}
 			}
 		});
@@ -168,7 +170,7 @@ public class TranslateActivity extends Activity {
         	
         	String picturePath = data.getStringExtra("picture_file_path");
         	//picture_file_path;
-
+        	tvTargetRealName.setText("Processing image...");
             processPictureWhenReady(picturePath);
         	//dumpIntent(data);
             
@@ -267,7 +269,6 @@ public class TranslateActivity extends Activity {
         } else {
             new SendService().execute();
         }
-    	//new SendService().execute();
     }
 
     private void sendPic(){
@@ -298,12 +299,13 @@ public class TranslateActivity extends Activity {
                 multipart.addFilePart("sound_file", uploadFile);
      
                 List<String> response = multipart.finish();
-                 
-                System.out.println("SERVER REPLIED:");
-        
+                
+                String server_reply = "";
                 for (String line : response) {
-                    System.out.println(line);
+                    server_reply += line;
                 }
+                Log.d(LOGTAG, "Send voice reply:"+server_reply);
+                
                 //lock.unlock();
             } catch (IOException ex) {
                 System.err.println(ex);
@@ -318,23 +320,22 @@ public class TranslateActivity extends Activity {
     
     private class receiveService extends AsyncTask<Void, Void, Void>  
     {
-    	boolean should_run = true;
     	protected Void doInBackground(Void... params)  
         {  
     		ReceiveUtility re = new ReceiveUtility();
-    		while(should_run){
+    		while(!isCancelled()){
     			//lock.lock();
     			//int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
-    			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
+    			int count = re.receive(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
     			if(count!=-1){    
-        			System.out.println("Received Success!"+String.valueOf(count));
+        			Log.d(LOGTAG, "Bytes Received"+String.valueOf(count));
         			audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
         		}
         		else{
         			//System.out.println("No voice message found!");
         		}
         		try {
-					Thread.sleep(1000);
+					Thread.sleep(1500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -370,11 +371,11 @@ public class TranslateActivity extends Activity {
 
                 List<String> response = multipart.finish();
 
-                System.out.println("SERVER REPLIED:");
-
+                String server_reply = "";
                 for (String line : response) {
-                    System.out.println(line);
+                    server_reply += line;
                 }
+                Log.d(LOGTAG, "Send pic reply:"+server_reply);
                 return response.get(0);
             } catch (IOException ex) {
                 System.err.println(ex);
