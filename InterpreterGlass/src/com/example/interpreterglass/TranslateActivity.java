@@ -138,7 +138,7 @@ public class TranslateActivity extends Activity {
 				{
 					audio.stopRecording();
 					long time_now = System.currentTimeMillis();
-					if (time_now - record_started_time < 800)
+					if (time_now - record_started_time < 1500)
 					{
 						tvRecording.setText("Speech is too short!");
 					}else

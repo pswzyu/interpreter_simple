@@ -8,3 +8,5 @@ Interpreter/gen
 Interpreter/bin
 InterpreterGlass/bin
 InterpreterGlass/gen
+InterpreterGlass/.settings
+InterpreterGlass/libs
