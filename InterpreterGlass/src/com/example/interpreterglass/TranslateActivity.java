@@ -43,6 +43,7 @@ public class TranslateActivity extends Activity {
 	receiveService m_receiveService;
 	
 	long record_started_time = 0;
+	long last_swipe_down_time = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,14 @@ public class TranslateActivity extends Activity {
 					// do something on left (backwards) swipe
 
 					return true;
+				} else if (gesture == Gesture.SWIPE_DOWN) {
+					// do something on left (backwards) swipe
+					long time_now = System.currentTimeMillis();
+					if ( time_now - last_swipe_down_time > 1500)
+					{
+						last_swipe_down_time = time_now;
+						return true;
+					}
 				}
 				return false;
 			}

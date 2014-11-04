@@ -16,6 +16,7 @@ public class Audio {
     public void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setAudioChannels(1);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mRecorder.setOutputFile(config.getSendFileName());
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
