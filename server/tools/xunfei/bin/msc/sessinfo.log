@@ -18,3 +18,13 @@ Time  2014/10/09 09:13:44 686
 [2014/10/09 09:13:44 706] sessinfo   143  new session  
 [2014/10/09 09:13:44 706] sessinfo   144  csid =  cisr1P1HHBHruYY1wA4enHHlKYuYokLudcs  
 [2014/10/09 09:13:44 706] sessinfo   146  csid_t =  1412860421  
+============================================================
+Time  2014/11/03 19:53:33 598 
+============================================================
+[2014/11/03 19:53:33 598] sessinfo   415  session info loaded!  
+[2014/11/03 19:53:33 599] sessinfo   424  SYS_MSG_SHUTDOWN  
+[2014/11/03 19:53:33 599] sessinfo   176  no receive upload success response  
+[2014/11/03 19:53:33 600] sessinfo   120  perflog session  
+[2014/11/03 19:53:33 600] sessinfo   121  csid =  cisr1P1HHBHruYY1wA4enHHlKYuYokLudcs  
+[2014/11/03 19:53:33 600] sessinfo   123  csid_t =  1412860421  
+[2014/11/03 19:53:33 600] dkjson     781  dkjson:781: bad argument #2 to 'pegmatch' (string expected, got nil)  
