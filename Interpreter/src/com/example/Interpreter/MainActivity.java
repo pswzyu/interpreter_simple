@@ -351,7 +351,7 @@ public class MainActivity extends Activity {
                 photo_fullsize.delete();
                 photo_scaled.delete();
             	Log.i("time","front");
-            	btnAddTarget.setText(config.getTargetId());
+            	btnAddTarget.setText(config.getTargetRealName());
             }
 //        	while(config.getTargetId().equals("")){
 //        		try {

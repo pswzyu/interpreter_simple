@@ -22,7 +22,7 @@ if (empty($_FILES['sound_file'])|| empty($from_user_id) || empty($to_user_id))
     // convert the format of the uploaded file
     $file_info = pathinfo($fn_after_copy);
     $fn_after_conv = $file_info['dirname'].DIRECTORY_SEPARATOR .$file_info['filename'].".wav";
-    shell_exec("ffmpeg -i {$fn_after_copy} -ar 16000  {$fn_after_conv}");
+    shell_exec("ffmpeg -i {$fn_after_copy} -ac 1 -ar 16000 -af 'volume=volume=5dB'  {$fn_after_conv}");
     // delete the original file
     unlink($fn_after_copy);
     

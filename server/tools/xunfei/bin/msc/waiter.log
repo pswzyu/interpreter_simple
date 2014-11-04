@@ -382,3 +382,47 @@ Time  2014/10/09 09:13:41 071
 [2014/10/09 09:13:42 107] network    78   readable  
 [2014/10/09 09:13:42 107] network    318  update iplist http resp  nil  0  udata(f0045ca8) 
 [2014/10/09 09:13:42 107] network    325  update iplist ok  
+============================================================
+Time  2014/11/03 19:53:29 235 
+============================================================
+[2014/11/03 19:53:29 235] waiter     91   waiter loaded!  
+[2014/11/03 19:53:29 236] network    248  update_iplist  
+[2014/11/03 19:53:29 236] network    171  gethttpresp3  http://dev.voicecloud.cn:80/ip_list.txt  standard  
+[2014/11/03 19:53:29 236] network    153  gethttpresp  http://dev.voicecloud.cn:80/ip_list.txt  
+[2014/11/03 19:53:29 236] waiter     151  last gc at  1415062409  
+[2014/11/03 19:53:29 236] network    336  chunkedhttp  
+[2014/11/03 19:53:29 236] waiter     151  last gc at  1415062409  
+[2014/11/03 19:53:29 490] network    248  update_iplist  
+[2014/11/03 19:53:29 490] network    171  gethttpresp3  http://dev.voicecloud.cn:80/ip_list.txt  standard  
+[2014/11/03 19:53:29 490] network    153  gethttpresp  http://dev.voicecloud.cn:80/ip_list.txt  
+[2014/11/03 19:53:29 490] waiter     151  last gc at  1415062409  
+[2014/11/03 19:53:29 490] network    47   gethttpresp2  nil  1028  
+[2014/11/03 19:53:29 490] waiter     151  last gc at  1415062409  
+[2014/11/03 19:53:29 491] network    22   dns resp  0  
+[2014/11/03 19:53:29 491] network    157  gethttpresp dns ok  59.107.24.7  
+[2014/11/03 19:53:29 491] network    47   gethttpresp2  59.107.24.7  80  
+[2014/11/03 19:53:29 493] network    248  update_iplist  
+[2014/11/03 19:53:29 493] network    171  gethttpresp3  http://dev.voicecloud.cn:80/ip_list.txt  standard  
+[2014/11/03 19:53:29 493] network    153  gethttpresp  http://dev.voicecloud.cn:80/ip_list.txt  
+[2014/11/03 19:53:29 493] waiter     151  last gc at  1415062409  
+[2014/11/03 19:53:29 494] network    22   dns resp  0  
+[2014/11/03 19:53:29 494] network    157  gethttpresp dns ok  59.107.24.7  
+[2014/11/03 19:53:29 494] network    47   gethttpresp2  59.107.24.7  80  
+[2014/11/03 19:53:29 495] network    22   dns resp  0  
+[2014/11/03 19:53:29 495] network    157  gethttpresp dns ok  59.107.24.7  
+[2014/11/03 19:53:29 495] network    47   gethttpresp2  59.107.24.7  80  
+[2014/11/03 19:53:29 738] network    72   connected  
+[2014/11/03 19:53:29 741] network    72   connected  
+[2014/11/03 19:53:29 741] network    75   send ok  96  
+[2014/11/03 19:53:29 741] network    75   send ok  96  
+[2014/11/03 19:53:29 772] network    72   connected  
+[2014/11/03 19:53:29 772] network    75   send ok  96  
+[2014/11/03 19:53:29 997] network    78   readable  
+[2014/11/03 19:53:29 999] network    318  update iplist http resp  nil  0  udata(880744f8) 
+[2014/11/03 19:53:29 999] network    325  update iplist ok  
+[2014/11/03 19:53:29 000] network    78   readable  
+[2014/11/03 19:53:29 000] network    318  update iplist http resp  nil  0  udata(8800bf48) 
+[2014/11/03 19:53:29 000] network    325  update iplist ok  
+[2014/11/03 19:53:30 031] network    78   readable  
+[2014/11/03 19:53:30 031] network    318  update iplist http resp  nil  0  udata(88045f78) 
+[2014/11/03 19:53:30 031] network    325  update iplist ok  
