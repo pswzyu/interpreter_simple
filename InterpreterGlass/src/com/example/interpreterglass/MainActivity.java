@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
 
 		// Predefined users ////
 		usernames = new ArrayList<String>();
+		usernames.add("paul");
 		usernames.add("pswzyu");
 		usernames.add("xinyuyua");
 		usernames.add("sunsetrider");
@@ -61,7 +62,9 @@ public class MainActivity extends Activity {
 		passwords.add("123qwe");
 		passwords.add("123qwe");
 		passwords.add("123qwe");
+		passwords.add("123qwe");
 		user_infos = new HashMap<String, String>();
+		user_infos.put("paul", "RealName: paul\nSpeaks English");
 		user_infos.put("pswzyu", "RealName: zhangyu\nSpeaks English");
 		user_infos.put("xinyuyua", "RealName: yuanxinyu\nSpeaks Chinese");
 		user_infos.put("sunsetrider", "RealName: yongshengsong\nSpeaks Chinese");
