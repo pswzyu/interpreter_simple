@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,14 +24,24 @@ import java.io.*;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import com.iflytek.speech.ErrorCode;
+import com.iflytek.speech.ISpeechModule;
+import com.iflytek.speech.InitListener;
+import com.iflytek.speech.RecognizerListener;
+import com.iflytek.speech.RecognizerResult;
+import com.iflytek.speech.SpeechConstant;
+import com.iflytek.speech.SpeechRecognizer;
+import com.iflytek.speech.SpeechSynthesizer;
+import com.iflytek.speech.SynthesizerListener;
+
 
 public class MainActivity extends Activity {
 	
 
     private final int CAMERA_REQUEST = 1;
-    private final String LOG_TAG = Audio.class.getName();
+    private final String LOG_TAG = "Interpreter.MainActivity";
     private Config config;
-    private Audio audio;
+    //private Audio audio;
 
     private  Button btnRecord ;
     private  Button btnSend ;
@@ -38,6 +49,9 @@ public class MainActivity extends Activity {
     private  Button btnAddTarget ;
     
     receiveService m_receiveService;
+    
+    private SpeechRecognizer mIat;
+    private SpeechSynthesizer mTts;
 
     /**
      * Called when the activity is first created.
@@ -46,8 +60,14 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        mIat = new SpeechRecognizer(this, mInitListener);
+        mTts = new SpeechSynthesizer(this, mTtsInitListener);
+        
+        setIATParam();
+        setTTSParam();
 
-        audio = new Audio();
+        //audio = new Audio();
         config = Config.getConfig();
 		if(config.getSelfId().equals("") ){
 			System.out.println("here");
@@ -64,7 +84,8 @@ public class MainActivity extends Activity {
                     case MotionEvent.ACTION_DOWN:
                         v.setPressed(true);
                         // Start recording.
-                        audio.startRecording();
+                        //audio.startRecording();
+                        mIat.startListening(mRecognizerListener);
                         btnRecord.setText(R.string.button_recording);
                         btnRecord.setBackgroundColor(getResources().getColor(R.color.button_recording));
                         break;
@@ -72,7 +93,8 @@ public class MainActivity extends Activity {
                     case MotionEvent.ACTION_OUTSIDE:
                         v.setPressed(false);
                         // Stop recording.
-                        audio.stopRecording();
+                        //audio.stopRecording();
+                        mIat.stopListening(mRecognizerListener);
                         btnRecord.setText(R.string.button_waiting);
                         btnRecord.setBackgroundColor(getResources().getColor(R.color.button_waiting));
                         //audio.startPlaying(config.getSendFileName());
@@ -132,6 +154,117 @@ public class MainActivity extends Activity {
             }
         });
     }
+    
+    // this variable is the listerner for xunfei init
+    private InitListener mInitListener = new InitListener() {
+
+		@Override
+		public void onInit(ISpeechModule module, int code) {
+			Log.d(LOG_TAG, "SpeechRecognizer init() code = " + code);
+		}
+    };
+    private RecognizerListener mRecognizerListener = new RecognizerListener.Stub() {
+        
+        @Override
+        public void onVolumeChanged(int v) throws RemoteException {
+        	Log.d(LOG_TAG, "onVolumeChanged："	+ v);
+        }
+        
+        @Override
+        public void onResult(final RecognizerResult result, boolean isLast)
+                throws RemoteException {
+        	runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (null != result) {
+		            	// 显示
+						String iattext = JsonParser.parseIatResult(result.getResultString());
+						Log.d(LOG_TAG, "recognizer result：" + iattext);
+						
+						int code = mTts.startSpeaking(iattext, mTtsListener);
+						Log.d(LOG_TAG, "start speak error : " + code);
+		            } else {
+		                Log.d(LOG_TAG, "recognizer result : null");
+		            }	
+				}
+			});
+            
+        }
+        @Override
+        public void onError(int errorCode) throws RemoteException {
+			Log.d(LOG_TAG, "onError Code："	+ errorCode);
+        }
+        @Override
+        public void onEndOfSpeech() throws RemoteException {
+        	Log.d(LOG_TAG, "onEndOfSpeech");
+        }
+        @Override
+        public void onBeginOfSpeech() throws RemoteException {
+        	Log.d(LOG_TAG, "onBeginOfSpeech");
+        }
+    };
+    
+    private InitListener mTtsInitListener = new InitListener() {
+
+		@Override
+		public void onInit(ISpeechModule arg0, int code) {
+			Log.d(LOG_TAG, "InitListener init() code = " + code);
+		}
+    };
+
+    private SynthesizerListener mTtsListener = new SynthesizerListener.Stub() {
+        @Override
+        public void onBufferProgress(int progress) throws RemoteException {
+        	 Log.d(LOG_TAG, "onBufferProgress :" + progress);
+//        	 showTip("onBufferProgress :" + progress);
+        }
+
+        @Override
+        public void onCompleted(int code) throws RemoteException {
+        	Log.d(LOG_TAG, "onCompleted code =" + code);
+        }
+
+        @Override
+        public void onSpeakBegin() throws RemoteException {
+            Log.d(LOG_TAG, "onSpeakBegin");
+        }
+
+        @Override
+        public void onSpeakPaused() throws RemoteException {
+        	 Log.d(LOG_TAG, "onSpeakPaused.");
+        }
+
+        @Override
+        public void onSpeakProgress(int progress) throws RemoteException {
+        	Log.d(LOG_TAG, "onSpeakProgress :" + progress);
+        }
+
+        @Override
+        public void onSpeakResumed() throws RemoteException {
+        	Log.d(LOG_TAG, "onSpeakResumed.");
+        }
+    };
+    // this function is used to set xunfei parameters
+	public void setIATParam(){
+			
+		mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+		mIat.setParameter(SpeechConstant.VAD_BOS, "4000");
+//		mIat.setParameter(SpeechConstant.ACCENT, mSharedPreferences.getString("accent_preference", "mandarin"));
+//		mIat.setParameter(SpeechConstant.DOMAIN, mSharedPreferences.getString("domain_perference", "iat"));
+		mIat.setParameter(SpeechConstant.VAD_EOS, "1000");
+		
+		String param = null;
+		param = "asr_ptt=1";
+		mIat.setParameter(SpeechConstant.PARAMS, param+",asr_audio_path=/sdcard/iflytek/wavaudio.pcm");
+
+	}
+	private void setTTSParam(){
+		mTts.setParameter(SpeechConstant.ENGINE_TYPE, "local");
+		mTts.setParameter(SpeechSynthesizer.VOICE_NAME, "xiaoyan");
+		mTts.setParameter(SpeechSynthesizer.SPEED, "50");		
+		mTts.setParameter(SpeechSynthesizer.PITCH, "50");		
+		mTts.setParameter(SpeechSynthesizer.VOLUME, "50");
+	}
     
     @Override
 	protected void onResume() {
@@ -200,6 +333,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         writeConfig(config);
+        mIat.cancel(mRecognizerListener);
+        mIat.destory();
+        mTts.stopSpeaking(mTtsListener);
+        mTts.destory();
         super.onDestroy();
     }
     
@@ -269,7 +406,7 @@ public class MainActivity extends Activity {
     			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
     			if(count!=-1){    
         			System.out.println("Received Success!"+String.valueOf(count));
-        			audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
+        			//audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
         		}
         		else{
         			//System.out.println("No voice message found!");
