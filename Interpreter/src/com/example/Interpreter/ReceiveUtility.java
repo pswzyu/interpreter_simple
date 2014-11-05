@@ -1,5 +1,6 @@
 package com.example.Interpreter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,5 +46,30 @@ public class ReceiveUtility {
             System.err.println(ex);
         }
 		return -1;
+	}
+	public String receiveString(String url,String selfId,String targetId){
+		String received = "";
+		try {
+			String path = url+"?self_id="+selfId+"&from_id="+targetId;
+			//StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+			HttpURLConnection conn = (HttpURLConnection)new URL(path).openConnection();
+			conn.setConnectTimeout(20000);
+			conn.setRequestMethod("GET");
+			if(conn.getResponseCode()==200){
+				InputStream inStream = conn.getInputStream();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+		        byte[] buffer = new byte[1024];  
+		        int byteread = 0;
+		        int bytesum = 0;
+		        while ((byteread = inStream.read(buffer)) != -1) {  
+		            bytesum += byteread;
+		            out.write(buffer, 0, byteread);
+		        }
+		        received = out.toString("UTF-8");
+			}	
+		}catch (Exception ex) {
+            System.err.println(ex);
+        }
+		return received;
 	}
 }

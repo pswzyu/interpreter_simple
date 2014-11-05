@@ -52,6 +52,8 @@ public class MainActivity extends Activity {
     
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
+    
+    private String iat_result;
 
     /**
      * Called when the activity is first created.
@@ -60,18 +62,15 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        mIat = new SpeechRecognizer(this, mInitListener);
-        mTts = new SpeechSynthesizer(this, mTtsInitListener);
-        
-        setIATParam();
-        setTTSParam();
 
         //audio = new Audio();
         config = Config.getConfig();
-		if(config.getSelfId().equals("") ){
-			System.out.println("here");
-		}
+		
+		mIat = new SpeechRecognizer(this, mInitListener);
+        mTts = new SpeechSynthesizer(this, mTtsInitListener);
+        setIATParam();
+        setTTSParam();
+        
         // Initialize UI.
         btnRecord = (Button) findViewById(R.id.button_record);
         btnSend = (Button) findViewById(R.id.button_send);
@@ -101,7 +100,7 @@ public class MainActivity extends Activity {
 
                         btnRecord.setVisibility(View.INVISIBLE);
                         btnBack.setVisibility(View.VISIBLE);
-                        btnSend.setVisibility(View.VISIBLE);
+                        //btnSend.setVisibility(View.VISIBLE);
                         btnRecord.setText(R.string.button_waiting);
                         btnRecord.setBackgroundColor(getResources().getColor(R.color.button_waiting));
                         break;
@@ -180,12 +179,11 @@ public class MainActivity extends Activity {
 		            	// 显示
 						String iattext = JsonParser.parseIatResult(result.getResultString());
 						Log.d(LOG_TAG, "recognizer result：" + iattext);
-						
-						int code = mTts.startSpeaking(iattext, mTtsListener);
-						Log.d(LOG_TAG, "start speak error : " + code);
+						iat_result = iattext;
+						btnSend.setVisibility(View.VISIBLE);
 		            } else {
 		                Log.d(LOG_TAG, "recognizer result : null");
-		            }	
+		            }
 				}
 			});
             
@@ -247,7 +245,7 @@ public class MainActivity extends Activity {
     // this function is used to set xunfei parameters
 	public void setIATParam(){
 			
-		mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+		mIat.setParameter(SpeechConstant.LANGUAGE, config.getSelfLanguage().toLowerCase());
 		mIat.setParameter(SpeechConstant.VAD_BOS, "4000");
 //		mIat.setParameter(SpeechConstant.ACCENT, mSharedPreferences.getString("accent_preference", "mandarin"));
 //		mIat.setParameter(SpeechConstant.DOMAIN, mSharedPreferences.getString("domain_perference", "iat"));
@@ -366,7 +364,7 @@ public class MainActivity extends Activity {
     			//lock.lock();
     			String charset = "UTF-8";
     			//config = Config.getConfig();
-    	        File uploadFile = new File(config.getSendFileName());
+    	        //File uploadFile = new File(config.getSendFileName());
     	       
                 SendUtility multipart = new SendUtility(config.getSendUrl(), charset);
           
@@ -374,7 +372,8 @@ public class MainActivity extends Activity {
                 //multipart.addHeaderField("Test-Header", "Header-Value");
                 multipart.addFormField("target_id", config.getTargetId());
                 multipart.addFormField("self_id", config.getSelfId());
-                multipart.addFilePart("sound_file", uploadFile);
+                multipart.addFormField("content", iat_result);
+                //multipart.addFilePart("sound_file", uploadFile);
      
                 List<String> response = multipart.finish();
                  
@@ -403,10 +402,13 @@ public class MainActivity extends Activity {
     		while(!isCancelled()){
     			//lock.lock();
     			//int count = re.revieve(config.getReceiveUrl(),config.getTargetId(),config.getSelfId(),config.getReceiveFileName());	//for test only!!
-    			int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
-    			if(count!=-1){    
-        			System.out.println("Received Success!"+String.valueOf(count));
+    			//int count = re.revieve(config.getReceiveUrl(),config.getSelfId(),config.getTargetId(),config.getReceiveFileName());
+    			String received = re.receiveString(config.getReceiveUrl(),config.getSelfId(),config.getTargetId());
+    			if(!received.equals("")){    
+        			System.out.println("Received Success!"+received);
         			//audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
+					int code = mTts.startSpeaking(received, mTtsListener);
+					Log.d(LOG_TAG, "start speak error : " + code);
         		}
         		else{
         			//System.out.println("No voice message found!");
@@ -458,17 +460,14 @@ public class MainActivity extends Activity {
                     System.out.println(line);
                 }
                 String result = response.get(0);
-                Log.i("time","back");
                 return result;
             } catch (IOException ex) {
                 System.err.println(ex);
             }
-            Log.i("time","back null");
             return null;
         }
         protected void onPostExecute(String result)
         {
-        	Log.i("time","front");
         	if (result == null || result.equals("NULL") )
             {
                 // alert the user that the pic is not valid
@@ -481,13 +480,11 @@ public class MainActivity extends Activity {
 	        	/////write realname
             	config.setTargetId(temp[0]);
                 config.setTargetRealName(temp[1]);
-            	Log.i("time","front");
 				// delete the tmp files after finish
                 File photo_fullsize = new File(config.getTargetPhotoFileName());
                 File photo_scaled = new File(config.getScaledTargetPhotoFileName());
                 photo_fullsize.delete();
                 photo_scaled.delete();
-            	Log.i("time","front");
             	btnAddTarget.setText(config.getTargetRealName());
             }
 //        	while(config.getTargetId().equals("")){

@@ -6,8 +6,7 @@
     <string name="instruction">Swipe to select the user you want to login as, tap the touchpad to confirm</string>
     <string name="title_activity_translate">TranslateActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="translate_instruction">Use two finger tap to open camera to recognize people.
-        Then, press and hold</string>
+    <string name="translate_instruction">Use two finger tap to recognize people. Then, press and hold to talk!</string>
     <string name="voice_trigger">Glass Translator</string>
 
 </resources>

@@ -178,6 +178,7 @@ public class MainActivity extends Activity {
 					if (!user_id.equals("0"))
 					{
 						real_name = splited[1];
+						config.setSelfLanguage(splited[2]);
 					}
 				}
 				

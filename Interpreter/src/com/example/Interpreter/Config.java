@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import android.os.Environment;
+
 public class Config{
-    private static final String filePath = "/sdcard/interpreter/";
+    private static final String filePath = Environment.getExternalStorageDirectory().getPath()+"/interpreter/";
     private static final String sendFileName = filePath + "send";
     private static final String receiveFileName = filePath + "receive";
     private static final String configFileName = filePath + "config.cfg";
@@ -15,6 +17,7 @@ public class Config{
 
     private String selfId = "";
     private String selfName = "";
+    private String selfLanguage = "";
     private String targetId = "";
     private String targetName = "";
     private String targetRealName = "";
@@ -22,11 +25,15 @@ public class Config{
 //	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
 //    private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
 //    private String loginUrl = "http://home.cnzy.me:8001/interpreter/login.php";
+	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload_s.php";
+	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive_s.php";
+    private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
+    private String loginUrl = "http://home.cnzy.me:8001/interpreter/login_s.php";
     
-    private String sendUrl = "http://198.199.97.166/interpreter/server/upload.php";
-    private String receiveUrl = "http://198.199.97.166/interpreter/server/receive.php";
-    private String sendPicUrl = "http://198.199.97.166/interpreter/server/face.php";
-    private String loginUrl = "http://198.199.97.166/interpreter/server/login.php";
+//    private String sendUrl = "http://198.199.97.166/interpreter/server/upload.php";
+//    private String receiveUrl = "http://198.199.97.166/interpreter/server/receive.php";
+//    private String sendPicUrl = "http://198.199.97.166/interpreter/server/face.php";
+//    private String loginUrl = "http://198.199.97.166/interpreter/server/login.php";
 
     static double target_photo_scale_factor = 0.25;
 
@@ -78,6 +85,14 @@ public class Config{
 
     public void setSelfName(String selfName) {
         this.selfName = selfName;
+    }
+    
+    public String getSelfLanguage() {
+        return selfLanguage;
+    }
+
+    public void setSelfLanguage(String selfLanguage) {
+        this.selfLanguage = selfLanguage;
     }
 
     public void setTargetId(String targetId) {

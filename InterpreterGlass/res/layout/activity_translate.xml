@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/translate_instruction"
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/textView1"
@@ -18,7 +18,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
         android:text=""
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -27,7 +27,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView2"
         android:text="Talking to: "
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/tvTargetRealName"
@@ -36,7 +36,7 @@
         android:layout_below="@+id/textView2"
         android:layout_toRightOf="@+id/textView3"
         android:text=""
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/tvRecording"
@@ -45,6 +45,6 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView3"
         android:text=""
-        android:textSize="20dp" />
+        android:textSize="25dp" />
 
 </RelativeLayout>

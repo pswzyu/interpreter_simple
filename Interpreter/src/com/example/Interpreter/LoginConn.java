@@ -10,6 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import android.util.Log;
+
 public class LoginConn {
 	
 
@@ -38,6 +40,7 @@ public class LoginConn {
 	        	config.setSelfId(temp[0]);
 	        	/////write realname
 	        	config.setSelfName(temp[1]);
+	        	config.setSelfLanguage(temp[2]);
 	        	return true;
 	        }
 		} catch (IOException e) {

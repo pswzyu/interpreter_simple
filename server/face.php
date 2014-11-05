@@ -77,7 +77,7 @@ function identify(&$api, $filename, $group_name)
 		}
 	}
         
-        if (!empty($result))
+        if ($name != "")
         {
             $udb->query("SELECT `id` FROM `interpreter`.`user_info`
                     WHERE `real_name` = '{$name}';");

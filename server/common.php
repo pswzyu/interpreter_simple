@@ -18,7 +18,8 @@ include_once(FROOT."config/lang.php");
 $udb = new UDB();
 $udb -> connect($config_database_server, $config_database_username, $config_database_password);
 $udb -> query("USE `interpreter`");
-$udb -> query("SET NAMES UTF8");
+$udb -> query("SET NAMES 'utf8';");
+$udb -> query("SET CHARACTER SET utf8;");
 
 
 $magic_quote = get_magic_quotes_gpc();
