@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import java.io.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 
 import com.iflytek.speech.ErrorCode;
@@ -52,6 +55,7 @@ public class MainActivity extends Activity {
     
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
+    private TextToSpeech android_tts;
     
     private String iat_result;
 
@@ -67,9 +71,14 @@ public class MainActivity extends Activity {
         config = Config.getConfig();
 		
 		mIat = new SpeechRecognizer(this, mInitListener);
-        mTts = new SpeechSynthesizer(this, mTtsInitListener);
+		if (config.getSelfLanguage().equals("zh_CN"))
+		{
+			mTts = new SpeechSynthesizer(this, mTtsInitListener);
+	        setTTSParam();
+		}else{
+			android_tts = new TextToSpeech(this, androidTTSInitListener);
+		}
         setIATParam();
-        setTTSParam();
         
         // Initialize UI.
         btnRecord = (Button) findViewById(R.id.button_record);
@@ -162,6 +171,7 @@ public class MainActivity extends Activity {
 			Log.d(LOG_TAG, "SpeechRecognizer init() code = " + code);
 		}
     };
+    
     private RecognizerListener mRecognizerListener = new RecognizerListener.Stub() {
         
         @Override
@@ -242,6 +252,19 @@ public class MainActivity extends Activity {
         	Log.d(LOG_TAG, "onSpeakResumed.");
         }
     };
+    
+    private OnInitListener androidTTSInitListener = new OnInitListener(){
+
+		@Override
+		public void onInit(int status) {
+			// TODO Auto-generated method stub
+			if (status == TextToSpeech.SUCCESS) {
+				android_tts.setLanguage(Locale.ENGLISH);
+			}
+		}
+    	
+    };
+    
     // this function is used to set xunfei parameters
 	public void setIATParam(){
 			
@@ -333,8 +356,16 @@ public class MainActivity extends Activity {
         writeConfig(config);
         mIat.cancel(mRecognizerListener);
         mIat.destory();
-        mTts.stopSpeaking(mTtsListener);
-        mTts.destory();
+        if (mTts != null)
+        {
+        	mTts.stopSpeaking(mTtsListener);
+            mTts.destory();
+        }
+        if (android_tts != null)
+        {
+        	android_tts.stop();
+        	android_tts.shutdown();
+        }
         super.onDestroy();
     }
     
@@ -407,8 +438,14 @@ public class MainActivity extends Activity {
     			if(!received.equals("")){    
         			System.out.println("Received Success!"+received);
         			//audio.startPlaying(config.getReceiveFileName()+String.valueOf(count));
-					int code = mTts.startSpeaking(received, mTtsListener);
-					Log.d(LOG_TAG, "start speak error : " + code);
+        			int error_code = 0;
+        			if (config.getSelfLanguage().equals("zh_CN"))
+        			{
+        				error_code = mTts.startSpeaking(received, mTtsListener);
+        			}else{
+        				error_code = android_tts.speak(received, TextToSpeech.QUEUE_ADD, null);
+        			}
+					Log.d(LOG_TAG, "start speak error : " + error_code);
         		}
         		else{
         			//System.out.println("No voice message found!");
