@@ -9,12 +9,14 @@ For testers, please download the app from download folder, and then download the
 
 After start the app, it will show the login screen. Right now, we are in alpha phase, so we dont have public registeration supported. We have several pre-registered users that have the properties shown below:
 
-| ID        | RealName       |  Username  |  Password | Native Language |
-|-----------|---------------:| -----------:|-----------|-----------------|
-| 1         | zhangyu        | pswzyu     |     123qwe |           zh_CN|
-| 2         | xinyuyuan      |   xinyuyua |      123qwe|           zh_CN|
-| 3         | yongshengsong  |   sunsetrider |   123qwe|           zh_CN|
-| 4         | paul           |   paul     |      123qwe|            en_us|
+| ID        | RealName       |   Username  |  Password | Native Language |
+|-----------|---------------:|------------:|-----------|-----------------|
+| 1         | zhangyu        |    pswzyu   |    123qwe |           zh_CN |
+| 2         | xinyuyuan      |    xinyuyua |    123qwe |           zh_CN |
+| 3         | yongshengsong  | sunsetrider |    123qwe |           zh_CN |
+| 4         | paul           |    paul     |    123qwe |           en_us |
+
+On the smartphone client, You can login as one of the users. On the google glass client, since it does not have input device, Then, you can start to recognize the person you are talking to. 
 
 
 ####Smartphone Client
