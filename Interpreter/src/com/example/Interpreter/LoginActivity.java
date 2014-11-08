@@ -3,6 +3,7 @@ package com.example.Interpreter;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.*;
+import java.util.List;
 
 
 
@@ -55,6 +57,11 @@ public class LoginActivity extends Activity  {
                 new Login().execute();
             }
         });
+
+        // Install the speech service if it's not.
+        if (!speechServiceIsInstalled()) {
+            ApkInstaller.installFromAssets(LoginActivity.this, getResources().getString(R.string.speech_service_name));
+        }
     }
 
     // Write the configuration to file.
@@ -111,5 +118,20 @@ public class LoginActivity extends Activity  {
 
             return null;
         }
+    }
+
+    // Test if the speech service is installed.
+    private boolean speechServiceIsInstalled(){
+        String packageName = "com.iflytek.speechcloud";
+        List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+        for(int i = 0; i < packages.size(); i++){
+            PackageInfo packageInfo = packages.get(i);
+            if(packageInfo.packageName.equals(packageName)){
+                return true;
+                }else{
+                continue;
+                }
+            }
+        return false;
     }
 }

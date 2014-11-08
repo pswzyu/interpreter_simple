@@ -1,13 +1,10 @@
 package com.example.Interpreter;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import android.os.Environment;
 
-public class Config{
+import java.io.Serializable;
+
+public class Config implements Serializable {
     private static final String filePath = Environment.getExternalStorageDirectory().getPath()+"/interpreter/";
     private static final String sendFileName = filePath + "send";
     private static final String receiveFileName = filePath + "receive";

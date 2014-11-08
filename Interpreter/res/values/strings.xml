@@ -14,4 +14,5 @@
     <string name="button_play">Click to Play</string>
     <string name="info_target">Target:</string>
     <string name="info_self">Self:</string>
+    <string name="speech_service_name">SpeechService.apk</string>
 </resources>
