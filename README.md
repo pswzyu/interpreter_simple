@@ -1,8 +1,8 @@
-#interpreter_simple
+#Glass Translator
 
 ##How to run
 ###APK download
-The downloadable apk can be downloaded from the 'download' folder, please select the version according to your device. Or you can download from the hockey platform.
+The downloadable apk can be downloaded from the 'test' folder, please select the version according to your device. Or you can download from the hockey platform.
 
 ###Install
 For testers, please download the app from download folder, and then download the file named 'SpeechService.apk'(this is the speech related service our app depends on). Then please install 'SpeechService.apk' and our app using this command:
@@ -24,6 +24,8 @@ After start the app, it will show the login screen. Right now, we are in alpha p
 | 2         | xinyuyuan      |    xinyuyua |    123qwe |           zh_CN |
 | 3         | yongshengsong  | sunsetrider |    123qwe |           zh_CN |
 | 4         | paul           |    paul     |    123qwe |           en_us |
+
+The image of these users can be found in 'test' folder, you can open these images in github directly and recognize these images when you are testing.
 
 ####Mobile phone client
 On the smartphone client, You can login as one of the users. 
