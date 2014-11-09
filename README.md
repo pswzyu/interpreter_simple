@@ -20,7 +20,7 @@ After start the app, it will show the login screen. Right now, we are in alpha p
 
 | ID        | RealName       |   Username  |  Password | Native Language |
 |-----------|---------------:|------------:|-----------|-----------------|
-| 1         | zhangyu        |    pswzyu   |    123qwe |           zh_CN |
+| 1         | zhangyu        |    pswzyu   |    123qwe |           en_us |
 | 2         | xinyuyuan      |    xinyuyua |    123qwe |           zh_CN |
 | 3         | yongshengsong  | sunsetrider |    123qwe |           zh_CN |
 | 4         | paul           |    paul     |    123qwe |           en_us |
