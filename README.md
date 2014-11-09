@@ -44,10 +44,3 @@ Google translate
 
 ###Face recognition
 Face++
-
-
-
-##Reference
-We used some of the information from other git repositories
-https://github.com/gillesdemey/google-speech-v2
-https://github.com/benoitfragit/google2ubuntu
