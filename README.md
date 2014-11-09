@@ -16,7 +16,7 @@ adb install InterpreterGlass.apk
 or other apk install methods you prefer. After that, you can install our app and start to test.
 
 ###Testing
-After start the app, it will show the login screen. Right now, we are in alpha phase, so we dont have public registeration supported. We have several pre-registered users that have the properties shown below:
+After start the app, it will show the login screen. Right now, we are in alpha phase, so we dont have public registeration supported. We have several pre-registered users that have the properties shown below(use Username to login):
 
 | ID        | RealName       |   Username  |  Password | Native Language |
 |-----------|---------------:|------------:|-----------|-----------------|
