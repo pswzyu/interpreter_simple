@@ -4,6 +4,7 @@ include_once("./common.php");
 include_once(FROOT."classes/ATTServices.php");
 include_once(FROOT."classes/GoogleServices.php");
 include_once(FROOT."classes/XunfeiServices.php");
+//include_once(FROOT."classes/MicrosoftServices.php");
 
 $send_time = intval(microtime($get_as_float=true)*1000);
 //print_r(microtime());
@@ -37,6 +38,7 @@ if (empty($_GET["self_id"]))
         //$att_services = new ATTServices();
         $google_services = new GoogleServices();
         //$xunfei_services = new XunfeiServices($xunfei_bin_dir);
+        //$microsoft_services = new MicrosoftServices();
         
 //        if ($from_userinfo["language"] == "zh_CN")
 //        {
@@ -56,6 +58,8 @@ if (empty($_GET["self_id"]))
         //echo "from_test:".$from_text."  time".intval(microtime($get_as_float=true)*1000)."<br/>";
         // translate
         $from_text = $result['string_content'];
+//        $to_text = $microsoft_services->translate($from_text, $from_userinfo["language"],
+//                $self_userinfo["language"]);
         $to_text = $google_services->translate($from_text, $from_userinfo["language"],
                 $self_userinfo["language"]);
         
