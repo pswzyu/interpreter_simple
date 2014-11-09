@@ -4,9 +4,18 @@
 ###APK download
 The downloadable apk can be downloaded from the 'download' folder, please select the version according to your device. Or you can download from the hockey platform.
 
-###Test
-For testers, please download the app from download folder, and then download the file named 'SpeechService.apk'. Then please install 'SpeechService.apk' through 'adb install SpeechService.apk' command or other install methods you prefer. After that, you can install our app and start to test.
+###Install
+For testers, please download the app from download folder, and then download the file named 'SpeechService.apk'(this is the speech related service our app depends on). Then please install 'SpeechService.apk' and our app using this command:
+adb install SpeechService.apk
+```bash
+#use this line if you are testing mobile client
+adb install Interpreter.apk
+# use this line if you are testing glass client
+adb install InterpreterGlass.apk
+```
+or other apk install methods you prefer. After that, you can install our app and start to test.
 
+###Testing
 After start the app, it will show the login screen. Right now, we are in alpha phase, so we dont have public registeration supported. We have several pre-registered users that have the properties shown below:
 
 | ID        | RealName       |   Username  |  Password | Native Language |
@@ -16,23 +25,19 @@ After start the app, it will show the login screen. Right now, we are in alpha p
 | 3         | yongshengsong  | sunsetrider |    123qwe |           zh_CN |
 | 4         | paul           |    paul     |    123qwe |           en_us |
 
-On the smartphone client, You can login as one of the users. On the google glass client, since it does not have input device, Then, you can start to recognize the person you are talking to. 
+####Mobile phone client
+On the smartphone client, You can login as one of the users. 
+Then, you can start to recognize the person you are talking to. On mobile client, you can press "add target" to take picture for recognition.
+After that, you can start talking. On mobile phone client, press and hold the "Press to record" button to talk and then release the button to finish. Then press the send button to send the speech.
 
-
-####Smartphone Client
-After app started, you should first input the user's id into the app for the app to know who you are. You can choose one of the pre-registered userids and input it into the "selfid" input box.
-The second step is let the app know who you are talking to. You can finish this step by taking a picture of the people you are talking to. You can pull up the picture of the pre-registered users on the computer screen and then take a picture of that.
-After the app has recognized the people you are talking to, the name of the user will be displayed in the app. Then, you can start talking by press the "Hold to Speak" button. Release the button after you finish talking, then the speech will be uploaded to the server for process.
-At the same time, the listening user's device should start to fetch the speech, after it finished, the translated speech will be played automaticaly.
-
-####Google Glass Client
-
+####Google Glass client
+On the google glass client, since it does not have input device, you can select a user by swipe and then tap to login.
+Then, you can start to recognize the person you are talking to. On Glass, you can use two finger tap gesture to take picture.
+After that, you can start talking. On glass client, touch the touchpad while you speak, then release the touchpad when you finish. The speech will be sent automaticly on glass.
 
 ##API used
 ###Speech text conversion
 Xunfei
-Att
-Google voice api
 
 ###Translation
 Google translate
