@@ -119,7 +119,13 @@ public class TranslateActivity extends Activity {
         @Override
         public void onError(int errorCode) throws RemoteException {
 			Log.d(LOGTAG, "onError Code："	+ errorCode);
-			tvRecording.setText("Can't recognize speech...");
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					tvRecording.setText("Can't recognize speech...");
+				}
+			});
+			
         }
         @Override
         public void onEndOfSpeech() throws RemoteException {

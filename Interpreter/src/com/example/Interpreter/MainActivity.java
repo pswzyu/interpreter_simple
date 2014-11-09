@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
@@ -278,7 +279,8 @@ public class MainActivity extends Activity {
 		
 		String param = null;
 		param = "asr_ptt=1";
-		mIat.setParameter(SpeechConstant.PARAMS, param+",asr_audio_path=/sdcard/iflytek/wavaudio.pcm");
+		mIat.setParameter(SpeechConstant.PARAMS, param+",asr_audio_path="+
+				Environment.getExternalStorageDirectory().getPath()+"/iflytek/wavaudio.pcm");
 
 	}
 	private void setTTSParam(){

@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class Config implements java.io.Serializable{
-    private final String filePath = "/sdcard/interpreter/";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final String filePath = "/sdcard/interpreter/";
     private final String sendFileName = filePath + "send";
     private final String receiveFileName = filePath + "receive";
     private final String configFileName = filePath + "config.cfg";
@@ -21,16 +25,16 @@ public class Config implements java.io.Serializable{
     private String targetRealName = "";
 //	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload.php";
 //	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive.php";
-//  private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
-//  private String loginUrl = "http://home.cnzy.me:8001/interpreter/login.php";
-//    private String sendUrl = "http://198.199.97.166/interpreter/server/upload.php";
-//    private String receiveUrl = "http://198.199.97.166/interpreter/server/receive.php";
-//    private String sendPicUrl = "http://198.199.97.166/interpreter/server/face.php";
-//    private String loginUrl = "http://198.199.97.166/interpreter/server/login.php";
-    private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload_s.php";
-	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive_s.php";
-    private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
-    private String loginUrl = "http://home.cnzy.me:8001/interpreter/login_s.php";
+//	private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
+//	private String loginUrl = "http://home.cnzy.me:8001/interpreter/login.php";
+	private String sendUrl = "http://198.199.97.166/interpreter/server/upload_s.php";
+	private String receiveUrl = "http://198.199.97.166/interpreter/server/receive_s.php";
+	private String sendPicUrl = "http://198.199.97.166/interpreter/server/face.php";
+	private String loginUrl = "http://198.199.97.166/interpreter/server/login_s.php";
+//	private String sendUrl = "http://home.cnzy.me:8001/interpreter/upload_s.php";
+//	private String receiveUrl = "http://home.cnzy.me:8001/interpreter/receive_s.php";
+//	private String sendPicUrl = "http://home.cnzy.me:8001/interpreter/face.php";
+//	private String loginUrl = "http://home.cnzy.me:8001/interpreter/login_s.php";
 
     static double target_photo_scale_factor = 0.25;
 

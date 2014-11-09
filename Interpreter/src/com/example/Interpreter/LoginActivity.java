@@ -38,12 +38,12 @@ public class LoginActivity extends Activity  {
                 root_path.mkdir();
             }
 
-            writeConfig(config);
+            //writeConfig(config);
             SharedPreferences.Editor prefEditor = preferences.edit();
             prefEditor.putBoolean("firstStart", false);
             prefEditor.commit();
         } else {
-            config = readConfig();
+            //config = readConfig();
         }
 
         btnLogin = (Button) findViewById(R.id.button_login);
